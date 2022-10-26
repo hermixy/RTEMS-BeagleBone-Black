@@ -55,7 +55,7 @@ $ cd $HOME/quick-start/src/rsb/rtems
 $ ../source-builder/sb-set-builder --prefix=$HOME/quick-start/rtems/5 \
     --with-rtems-tests=yes bsps/erc32
 ```
-Build the BSP sample tests:
+Build the BSP:
 ```
 $ export PATH=$HOME/quick-start/rtems/6/bin:$PATH
 $ cd $HOME/quick-start/src/rtems
@@ -67,22 +67,30 @@ $ .waf
 $ sudo ./waf install
 ```
 
-##### Method 2, doesn't install all the packages
+#### Method 2, doesn't install all the packages
+Obtain the RTEMS Source Builder (RSB):
 ```
 $ cd
 $ mkdir -p development/rtems/releases
 $ cd development/rtems/releases
 $ git clone git://git.rtems.org/rtems-source-builder.git rtems-source-builder-6
+```
+Build and install the tool suite:
+```
 $ cd rtems-source-builder-6/rtems 
 $ sudo ../source-builder/sb-set-builder \
       --prefix=$HOME/development/rtems/6 6/rtems-arm
 $ cd ..
-$ ./source-builder/sb-check  
-$ ./source-builder/sb-set-builder --list-bsets 
+$ ./source-builder/sb-check
+```
+Obtain the the RTEMS sources:
 $ cd $HOME/development/rtems
 $ mkdir kernel
 $ cd kernel
 $ git clone git://git.rtems.org/rtems.git
+```
+Build the BSP:
+```
 $ export PATH=$HOME/development/rtems/6/bin:$PATH
 $ cd $HOME/development/rtems/kernel/rtems
 $ command -v arm-rtems6-gcc && echo "found" || echo "not found"
