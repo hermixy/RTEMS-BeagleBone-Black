@@ -100,7 +100,6 @@ $ echo "BUILD_TESTS = True" >> config.ini
 $ ./waf configure --prefix=$HOME/development/rtems/6
 $ .waf
 $ sudo ./waf install
-
 ```
 ### Kernel Image sample 📦
 In order to build a sample kernel image, provided by RTEMS:
