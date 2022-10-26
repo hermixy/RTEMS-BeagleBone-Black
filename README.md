@@ -36,7 +36,7 @@ $ sudo apt-get upgrade
 ```
 
 ### Installation 🔧
-#### Metodo 1
+#### Method 1, better if you want the libbsd package
 Obtain the RTEMS Source Builder (RSB), and the the RTEMS sources:
 ```
 $ mkdir -p $HOME/quick-start/src
@@ -55,9 +55,19 @@ $ cd $HOME/quick-start/src/rsb/rtems
 $ ../source-builder/sb-set-builder --prefix=$HOME/quick-start/rtems/5 \
     --with-rtems-tests=yes bsps/erc32
 ```
+Build the BSP sample tests:
+```
+$ export PATH=$HOME/quick-start/rtems/6/bin:$PATH
+$ cd $HOME/quick-start/src/rtems
+$ command -v arm-rtems6-gcc && echo "found" || echo "not found"
+$ echo "[arm/beagleboneblack]" > config.ini
+$ echo "BUILD_TESTS = True" >> config.ini
+$ ./waf configure --prefix=$HOME/quick-start/rtems/6
+$ .waf
+$ sudo ./waf install
+```
 
-
-##### Metodo 2
+##### Method 2, doesn't install all the packages
 ```
 $ cd
 $ mkdir -p development/rtems/releases
@@ -83,8 +93,16 @@ $ .waf
 $ sudo ./waf install
 
 ```
-### Kernel Image sample 📦 (review, maybe not with Metodo 1)
+### Kernel Image sample 📦
 In order to build a sample kernel image, provided by RTEMS:
+#### For Method 1
+```
+$ cd $HOME/quick-start/rtems/
+$ arm-rtems6-objcopy -Obinary $HOME/quick-start/src/rtems/build/arm/beagleboneblack/testsuites/samples/ticker.exe -O binary app.bin
+$ gzip -9 app.bin
+$ mkimage -A arm -O linux -T kernel -a 0x80000000 -e 0x80000000 -n RTEMS -d app.bin.gz rtems-app.img
+```
+#### For Method 2
 ```
 $ cd $HOME/development/rtems/
 $ arm-rtems6-objcopy -Obinary $HOME/development/rtems/kernel/rtems/build/arm/beagleboneblack/testsuites/samples/ticker.exe -O binary app.bin
