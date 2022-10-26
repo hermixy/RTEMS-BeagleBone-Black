@@ -36,6 +36,28 @@ $ sudo apt-get upgrade
 ```
 
 ### Installation 🔧
+#### Metodo 1
+Obtain the RTEMS Source Builder (RSB), and the the RTEMS sources:
+```
+$ mkdir -p $HOME/quick-start/src
+$ cd $HOME/quick-start/src
+$ git clone git://git.rtems.org/rtems-source-builder.git rsb
+$ git clone git://git.rtems.org/rtems.git
+```
+Offline download of all the sources to build the BeagleBone Black BSP:
+```
+$ cd $HOME/quick-start/src/rsb/rtems
+$ ../source-builder/sb-set-builder --source-only-download 6/rtems-arm
+```
+BSP stack build (Tool suite, BSP and Packages):
+```
+$ cd $HOME/quick-start/src/rsb/rtems  
+$ ../source-builder/sb-set-builder --prefix=$HOME/quick-start/rtems/5 \
+    --with-rtems-tests=yes bsps/erc32
+```
+
+
+##### Metodo 2
 ```
 $ cd
 $ mkdir -p development/rtems/releases
@@ -61,7 +83,7 @@ $ .waf
 $ sudo ./waf install
 
 ```
-### Kernel Image sample 📦
+### Kernel Image sample 📦 (review, maybe not with Metodo 1)
 In order to build a sample kernel image, provided by RTEMS:
 ```
 $ cd $HOME/development/rtems/
