@@ -63,7 +63,7 @@ $ command -v arm-rtems6-gcc && echo "found" || echo "not found"
 $ echo "[arm/beagleboneblack]" > config.ini
 $ echo "BUILD_TESTS = True" >> config.ini
 $ ./waf configure --prefix=$HOME/quick-start/rtems/6
-$ .waf
+$ ./waf
 $ sudo ./waf install
 ```
 
