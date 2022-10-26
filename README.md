@@ -21,7 +21,7 @@ $ software-properties-gtk
 ```
 then under the **"Ubuntu Software"** tab click **"Source code"**. Before building and installing RTEMS you'll have to access as root user with:
 ```
-sudo -i
+$ sudo -i
 ```
 After this, you'll have to install some packages:
 ```
@@ -66,7 +66,7 @@ $ rm -rf rsb
 Build the RTEMS BeagleBone Black BSP with the testsuites:
 ```
 $ cd rtems/
-$ cp /home/edison369/Desktop/Demo_Alan/docker/rtems6-arm-bbb/config.ini /home/edison369/quick-start/src/rtems/
+$ cp /home/edison369/Desktop/RTEMS-BeagleBone-Black/src/config.ini /home/edison369/quick-start/src/rtems/
 $ ./waf configure     --prefix=/home/edison369/quick-start/rtems/6
 $ ./waf
 $ ./waf install
@@ -114,7 +114,7 @@ $ cd build
 $ cd bbb-libbsd
 ```
 
-2. Double check the options in the Makefile [rtems-paths.mak](https://github.com/edison369/RTEMS-Raspberry-Pi/blob/main/build/rtems-paths.mak). You usually just need to set the path to the cross compiler and RTEMS BSP. In case you followed the installation in [RTEMS Installation](<#rtems-installation>):
+2. Double check the options in the Makefile [rtems-paths.mak](https://github.com/edison369/RTEMS-BeagleBone-Black/blob/main/build/rtems-paths.mak). You usually just need to set the path to the cross compiler and RTEMS BSP. In case you followed the installation in [RTEMS Installation](<#rtems-installation>):
 ```
 RTEMS_TOOL_BASE ?= /home/edison369/quick-start/rtems/6
 RTEMS_BSP_BASE ?= /home/edison369/quick-start/rtems/6
@@ -135,7 +135,7 @@ You'll notice that in order to build a kernel image, you just need an executable
 ```
 $ arm-rtems6-objcopy -Obinary <executable file> kernel.img 
 ```
-You'll get a kernel image. This is what is done in [Kernel Image sample 📦](<#kernel-image-sample->) and the [MakeFile](https://github.com/edison369/RTEMS-Raspberry-Pi/blob/main/build/rpi2/Makefile)
+You'll get a kernel image. This is what is done in [Kernel Image sample 📦](<#kernel-image-sample->) and the [MakeFile](https://github.com/edison369/RTEMS-BeagleBone-Black/blob/main/build/rpi2/Makefile)
 
 ### Commands to try 📋
 When you run the application on a target, you should get the shell prompt. Try some of these commands:
