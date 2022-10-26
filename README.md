@@ -19,108 +19,81 @@ First you'll have to add some deb-src lines under /etc/apt/sources.list. For tha
 ```
 $ software-properties-gtk
 ```
-then under the "Ubuntu Software" tab click "Source code".
+then under the **"Ubuntu Software"** tab click **"Source code"**. Before building and installing RTEMS you'll have to access as root user with:
+```
+sudo -i
+```
 After this, you'll have to install some packages:
 ```
-$ sudo apt-get update
-$ sudo apt install wget
-$ sudo apt-get install python2.7-dev
-$ sudo apt-get install git
-$ sudo apt-get install python3
-$ sudo apt-get build-dep build-essential gcc-defaults g++ gdb unzip \
-            pax bison flex texinfo python3-dev libpython2-dev libncurses5-dev \
-            zlib1g-dev
-$ sudo apt install python-is-python3
-$ sudo apt-get update
-$ sudo apt-get upgrade
+$ apt-get update && apt-get install -y \
+		apt-utils build-essential \
+		vim u-boot-tools git cmake \
+		bison flex texinfo bzip2 \
+		xz-utils unzip python \
+		libexpat1-dev \
+		python-dev zlib1g-dev libtinfo-dev
+$ apt-get install python2.7-dev
+$ apt-get install python3
+$ apt install python-is-python3
+$ apt-get install pax
+$ apt-get build-dep build-essential gcc-defaults g++ gdb \
+		python3-dev libpython2-dev libncurses5-dev
+$ apt-get update
+$ apt-get upgrade
 ```
 
 ### Installation 🔧
-#### Method 1, better if you want the libbsd package
-Obtain the RTEMS Source Builder (RSB), and the the RTEMS sources:
+Clone this repo in:
 ```
-$ mkdir -p $HOME/quick-start/src
-$ cd $HOME/quick-start/src
-$ git clone git://git.rtems.org/rtems-source-builder.git rsb
-$ git clone git://git.rtems.org/rtems.git
+$ cd /home/edison369/Desktop
 ```
-Offline download of all the sources to build the BeagleBone Black BSP:
+Unzip the RTEMS Source Builder (RSB), the RTEMS sources and the RTEMS libbsd sources:
 ```
-$ cd $HOME/quick-start/src/rsb/rtems
-$ ../source-builder/sb-set-builder --source-only-download 6/rtems-arm
-```
-BSP stack build (Tool suite, BSP and Packages):
-```
-$ cd $HOME/quick-start/src/rsb/rtems  
-$ ../source-builder/sb-set-builder --prefix=$HOME/quick-start/rtems/6 \
-    --with-rtems-tests=yes bsps/beagleboneblack
-```
-Build the BSP:
-```
-$ export PATH=$HOME/quick-start/rtems/6/bin:$PATH
-$ cd $HOME/quick-start/src/rtems
-$ command -v arm-rtems6-gcc && echo "found" || echo "not found"
-$ echo "[arm/beagleboneblack]" > config.ini
-$ echo "BUILD_TESTS = True" >> config.ini
-$ ./waf configure --prefix=$HOME/quick-start/rtems/6
-$ ./waf
-$ sudo ./waf install
-```
-
-#### Method 2, doesn't install all the packages
-Obtain the RTEMS Source Builder (RSB):
-```
-$ cd
-$ mkdir -p development/rtems/releases
-$ cd development/rtems/releases
-$ git clone git://git.rtems.org/rtems-source-builder.git rtems-source-builder-6
+$ mkdir -p /home/edison369/quick-start/src
+$ cd /home/edison369/quick-start/src
+$ cp /home/edison369/Desktop/RTEMS-BeagleBone-Black/src/rtems.zip /home/edison369/quick-start/src/ && unzip rtems.zip
+$ cp /home/edison369/Desktop/RTEMS-BeagleBone-Black/src/rtems-libbsd.zip /home/edison369/quick-start/src/ && unzip rtems-libbsd.zip
+$ cp /home/edison369/Desktop/RTEMS-BeagleBone-Black/src/rsb.zip /home/edison369/quick-start/src/ && unzip rsb.zip
+$ cd rsb && ./source-builder/sb-check
 ```
 Build and install the tool suite:
 ```
-$ cd rtems-source-builder-6/rtems 
-$ sudo ../source-builder/sb-set-builder \
-      --prefix=$HOME/development/rtems/6 6/rtems-arm
+$ cd rtems
+$ ../source-builder/sb-set-builder --prefix=/home/edison369/quick-start/rtems/6 6/rtems-arm
 $ cd ..
-$ ./source-builder/sb-check
+$ rm -rf rsb
 ```
-Obtain the the RTEMS sources:
+Build the RTEMS BeagleBone Black BSP with the testsuites:
 ```
-$ cd $HOME/development/rtems
-$ mkdir kernel
-$ cd kernel
-$ git clone git://git.rtems.org/rtems.git
+$ cd rtems/
+$ cp /home/edison369/Desktop/Demo_Alan/docker/rtems6-arm-bbb/config.ini /home/edison369/quick-start/src/rtems/
+$ ./waf configure     --prefix=/home/edison369/quick-start/rtems/6
+$ ./waf
+$ ./waf install
+$ cd..
 ```
-Build the BSP:
+Build RTEMS BeagleBone Black rtems-libbsd build:
 ```
-$ export PATH=$HOME/development/rtems/6/bin:$PATH
-$ cd $HOME/development/rtems/kernel/rtems
-$ command -v arm-rtems6-gcc && echo "found" || echo "not found"
-$ echo "[arm/beagleboneblack]" > config.ini
-$ echo "BUILD_TESTS = True" >> config.ini
-$ ./waf configure --prefix=$HOME/development/rtems/6
-$ .waf
-$ sudo ./waf install
+$ cd rtems-libbsd
+$ ./waf configure --prefix="/home/edison369/quick-start/rtems/6"     --rtems-tools="/home/edison369/quick-start/rtems/6"     --rtems-bsps=arm/beagleboneblack     --buildset=buildset/default.ini
+$ ./waf && \
+$ ./waf install && \
+$ cd .. && \
+$ rm -rf rtems-libbsd
 ```
 ### Kernel Image sample 📦
-In order to build a sample kernel image, provided by RTEMS:
-#### For Method 1
+In order to build a sample kernel image of the testsuite, provided by RTEMS:
 ```
+$ export PATH=$HOME/quick-start/rtems/6/bin:$PATH
 $ cd $HOME/quick-start/rtems/
 $ arm-rtems6-objcopy -Obinary $HOME/quick-start/src/rtems/build/arm/beagleboneblack/testsuites/samples/ticker.exe -O binary app.bin
 $ gzip -9 app.bin
 $ mkimage -A arm -O linux -T kernel -a 0x80000000 -e 0x80000000 -n RTEMS -d app.bin.gz rtems-app.img
 ```
-#### For Method 2
-```
-$ cd $HOME/development/rtems/
-$ arm-rtems6-objcopy -Obinary $HOME/development/rtems/kernel/rtems/build/arm/beagleboneblack/testsuites/samples/ticker.exe -O binary app.bin
-$ gzip -9 app.bin
-$ mkimage -A arm -O linux -T kernel -a 0x80000000 -e 0x80000000 -n RTEMS -d app.bin.gz rtems-app.img
-```
 ### Extras 🖥️
-If the BeagleBone Black is going to be connected to the computer via USB, suposing **edimar369** is the computer's username:
+If the BeagleBone Black is going to be connected to the computer via USB, suposing **edison369** is the computer's username:
 ```
-$ sudo adduser edimar369 dialout
+$ sudo adduser edison369 dialout
 $ sudo apt install screen
 ```
 	
@@ -129,22 +102,22 @@ In order to monitor the serial port, we first need to determine it's Linux devic
 $ ls -l /dev/ttyUSB* /dev/ttyACM*
 ```
 	
-To use screen and connect to the Raspberry Pi, suposing the device name is **ttyUSB0**:
+To use screen and connect to the BeagleBone Black, suposing the device name is **ttyUSB0**:
 ```
 $ sudo screen /dev/ttyUSB0 115200
 ```
 
-## How to build a Kernel Image using RTEMS 📦
+## How to build the Kernel Image using RTEMS 📦
 1. Change to the build directory.
 ```
 $ cd build
-$ cd rpi2
+$ cd bbb-libbsd
 ```
 
 2. Double check the options in the Makefile [rtems-paths.mak](https://github.com/edison369/RTEMS-Raspberry-Pi/blob/main/build/rtems-paths.mak). You usually just need to set the path to the cross compiler and RTEMS BSP. In case you followed the installation in [RTEMS Installation](<#rtems-installation>):
 ```
-RTEMS_TOOL_BASE ?= /home/edimar369/development/rtems/5
-RTEMS_BSP_BASE ?= /home/edimar369/development/rtems/5
+RTEMS_TOOL_BASE ?= /home/edison369/quick-start/rtems/6
+RTEMS_BSP_BASE ?= /home/edison369/quick-start/rtems/6
 ```
 
 3. Run make to build the executable:
@@ -160,7 +133,7 @@ $ make clean
 ### Note
 You'll notice that in order to build a kernel image, you just need an executable (.exe or .elf) and with the command:
 ```
-$ arm-rtems5-objcopy -Obinary <executable file> kernel.img 
+$ arm-rtems6-objcopy -Obinary <executable file> kernel.img 
 ```
 You'll get a kernel image. This is what is done in [Kernel Image sample 📦](<#kernel-image-sample->) and the [MakeFile](https://github.com/edison369/RTEMS-Raspberry-Pi/blob/main/build/rpi2/Makefile)
 
