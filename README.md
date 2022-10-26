@@ -84,6 +84,7 @@ $ cd ..
 $ ./source-builder/sb-check
 ```
 Obtain the the RTEMS sources:
+```
 $ cd $HOME/development/rtems
 $ mkdir kernel
 $ cd kernel
