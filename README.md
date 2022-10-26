@@ -52,8 +52,8 @@ $ ../source-builder/sb-set-builder --source-only-download 6/rtems-arm
 BSP stack build (Tool suite, BSP and Packages):
 ```
 $ cd $HOME/quick-start/src/rsb/rtems  
-$ ../source-builder/sb-set-builder --prefix=$HOME/quick-start/rtems/5 \
-    --with-rtems-tests=yes bsps/erc32
+$ ../source-builder/sb-set-builder --prefix=$HOME/quick-start/rtems/6 \
+    --with-rtems-tests=yes bsps/beagleboneblack
 ```
 Build the BSP:
 ```
