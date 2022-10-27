@@ -45,7 +45,7 @@ $ apt-get upgrade
 ### Installation 🔧
 Clone this repo in:
 ```
-$ cd /home/edison369/Desktop
+/home/edison369/Desktop
 ```
 Unzip the RTEMS Source Builder (RSB), the RTEMS sources and the RTEMS libbsd sources:
 ```
@@ -54,6 +54,8 @@ $ cd /home/edison369/quick-start/src
 $ cp /home/edison369/Desktop/RTEMS-BeagleBone-Black/src/rtems.zip /home/edison369/quick-start/src/ && unzip rtems.zip
 $ cp /home/edison369/Desktop/RTEMS-BeagleBone-Black/src/rtems-libbsd.zip /home/edison369/quick-start/src/ && unzip rtems-libbsd.zip
 $ cp /home/edison369/Desktop/RTEMS-BeagleBone-Black/src/rsb.zip /home/edison369/quick-start/src/ && unzip rsb.zip
+$ mv rtems-source-builder-bb9e049b103f3a47019a6cfad18e2b59c9e9ea97/ rsb
+$ mv rtems-8657986989f5c39444c8781a8bf76d8f48730b41/ rtems
 $ cd rsb && ./source-builder/sb-check
 ```
 Build and install the tool suite:
