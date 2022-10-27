@@ -78,9 +78,9 @@ Build RTEMS BeagleBone Black rtems-libbsd build:
 ```
 $ cd rtems-libbsd
 $ ./waf configure --prefix="/home/edison369/quick-start/rtems/6"     --rtems-tools="/home/edison369/quick-start/rtems/6"     --rtems-bsps=arm/beagleboneblack     --buildset=buildset/default.ini
-$ ./waf && \
-$ ./waf install && \
-$ cd .. && \
+$ ./waf
+$ ./waf install
+$ cd ..
 $ rm -rf rtems-libbsd
 ```
 ### Kernel Image sample 📦
