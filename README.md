@@ -62,7 +62,7 @@ Build and install the tool suite:
 ```
 $ cd rtems
 $ ../source-builder/sb-set-builder --prefix=/home/edison369/quick-start/rtems/6 6/rtems-arm
-$ cd ..
+$ cd /home/edison369/quick-start/src
 $ rm -rf rsb
 ```
 Build the RTEMS BeagleBone Black BSP with the testsuites:
