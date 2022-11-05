@@ -26,6 +26,10 @@ int  whetstone_command( int argc, char *argv[]);
 void rki_add_dl_commands(void);
 void rki_add_target_cmds(void);
 
+int rki_mpu6050_read_raw_command( int argc, char *argv[]);
+int rki_mpu6050_read_proc_command( int argc, char *argv[]);
+int rki_mpu6050_open_command( int argc, char *argv[]);
+
 /*
 **
 ** Start the RTEMS Shell.
@@ -77,11 +81,18 @@ int rki_add_local_cmds(void)
 
    rtems_shell_add_cmd("hello","misc","Say hello RTEMS!",hello_command);
 
-   rtems_shell_add_cmd("taskdemo","misc","run a set of tasks",task_command);
+   rtems_shell_add_cmd("taskdemo","misc","Run a set of tasks",task_command);
 
    rtems_shell_add_cmd("dhrystone","misc","Run the Dhrystone Benchmark",dhrystone_command);
 
    rtems_shell_add_cmd("whetstone","misc","Run the Whetstone Benchmark",whetstone_command);
+
+   rtems_shell_add_cmd("mpu6050open","misc","Register and open the MPU6050 driver",rki_mpu6050_open_command);
+
+   rtems_shell_add_cmd("mpu6050readraw","misc","Read raw data from the MPU6050 accelerometer and gyroscope",rki_mpu6050_read_raw_command);
+
+   rtems_shell_add_cmd("mpu6050readproc","misc","Read processed data from the MPU6050 accelerometer and gyroscope",rki_mpu6050_read_proc_command);
+
 
    /*
    ** Add the target specific commands
