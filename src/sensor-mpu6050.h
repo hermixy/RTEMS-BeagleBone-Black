@@ -56,46 +56,44 @@ extern "C" {
  *
  * @{
  */
+#define gyroscope_read
+#define accelerometer_read
 
 typedef enum {
   SENSOR_MPU6050_SET_CONF
 } sensor_mpu6050_command;
 
-int i2c_dev_register_sensor_mpu6050(const char *bus_path, const char *dev_path);
-int sensor_mpu6050_set_conf(int fd);
-int sensor_mpu6050_get_gyro(int16_t * buff);
-int sensor_mpu6050_get_accel(int16_t * buff);
-
-
-// I2C functions
-static int sensor_mpu6050_set_reg_8(i2c_dev *dev, int ptr, uint8_t *val);
-#ifdef hechopormi
-static int sensor_mpu6050_get_reg_8(uint8_t register_add, uint8_t * buff);
-
-static int read_bytes(int fd, uint16_t i2c_address, uint8_t data_address, uint16_t nr_bytes, int16_t * buff);
-#endif
-
-int read_bytes(int fd, uint16_t i2c_address, uint8_t data_address, uint16_t nr_bytes);
-
-#ifdef reg_16
-  static int sensor_mpu6050_set_reg_16(i2c_dev *dev, int ptr, uint8_t *val);
-  static int sensor_mpu6050_get_reg_16(const char *bus, uint8_t data_address, int16_t * buff);
-#endif
+typedef enum {
+  X,
+  Y,
+  Z
+} sensor_mpu6050_axis;
 
 static int sensor_mpu6050_ioctl(i2c_dev *dev, ioctl_command_t command, void *arg);
 
-#ifdef hechopormi
-// Accelerometer and Gyroscope functions
-static int sensor_mpu6050_get_gyro_X(uint8_t * buff);
-static int sensor_mpu6050_get_gyro_Y(uint8_t * buff);
-static int sensor_mpu6050_get_gyro_Z(uint8_t * buff);
-static int sensor_mpu6050_get_accel_X(uint8_t * buff);
-static int sensor_mpu6050_get_accel_Y(uint8_t * buff);
-static int sensor_mpu6050_get_accel_Z(uint8_t * buff);
+int i2c_dev_register_sensor_mpu6050(const char *bus_path, const char *dev_path);
+int sensor_mpu6050_set_conf(int fd);
+
+
+// I2C functions
+static int read_bytes(int fd, uint16_t i2c_address, uint8_t data_address, uint16_t nr_bytes, uint8_t **buff);
+
+static int sensor_mpu6050_set_reg_8(i2c_dev *dev, int ptr, uint8_t *val);
+static int sensor_mpu6050_get_reg_8(uint8_t register_add, uint8_t **buff);
+
+#ifdef gyroscope_read
+// Accelerometer functions
+int sensor_mpu6050_get_gyro(int16_t **buff);
+static int sensor_mpu6050_get_gyro_axis(uint8_t **buff, sensor_mpu6050_axis axis);
 
 #endif
 
+#ifdef accelerometer_read
+// Accelerometer functions
+int sensor_mpu6050_get_accel(int16_t **buff);
+static int sensor_mpu6050_get_accel_axis(uint8_t **buff, sensor_mpu6050_axis axis);
 
+#endif
 
 /** @} */
 
