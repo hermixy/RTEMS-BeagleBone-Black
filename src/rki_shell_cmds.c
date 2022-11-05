@@ -26,6 +26,8 @@ int  whetstone_command( int argc, char *argv[]);
 void rki_add_dl_commands(void);
 void rki_add_target_cmds(void);
 
+int rki_accel_command( int argc, char *argv[]);
+
 /*
 **
 ** Start the RTEMS Shell.
@@ -77,11 +79,13 @@ int rki_add_local_cmds(void)
 
    rtems_shell_add_cmd("hello","misc","Say hello RTEMS!",hello_command);
 
-   rtems_shell_add_cmd("taskdemo","misc","run a set of tasks",task_command);
+   rtems_shell_add_cmd("taskdemo","misc","Run a set of tasks",task_command);
 
    rtems_shell_add_cmd("dhrystone","misc","Run the Dhrystone Benchmark",dhrystone_command);
 
    rtems_shell_add_cmd("whetstone","misc","Run the Whetstone Benchmark",whetstone_command);
+   
+   rtems_shell_add_cmd("acceldemo","misc","Read the MPU6050 accelerometer and gyroscope",rki_accel_command);
 
    /*
    ** Add the target specific commands
