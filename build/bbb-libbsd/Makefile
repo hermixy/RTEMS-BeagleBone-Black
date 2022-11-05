@@ -8,7 +8,7 @@
 ARCH ?= arm-rtems6
 
 ##
-## Select your BSP here 
+## Select your BSP here
 ##
 BSP ?= beagleboneblack
 
@@ -31,12 +31,12 @@ RTEMS_ARCH_LIB2 = $(RTEMS_PREFIX)/$(ARCH)/lib
 ## Linker flags
 ##
 LDFLAGS ?= -mcpu=cortex-a8 -ffunction-sections -fdata-sections -Wl,--gc-sections
-LDFLAGS += --pipe -B$(RTEMS_ARCH_LIB2) -B$(RTEMS_ARCH_LIB) -qrtems $(WARNINGS) 
+LDFLAGS += --pipe -B$(RTEMS_ARCH_LIB2) -B$(RTEMS_ARCH_LIB) -qrtems $(WARNINGS)
 
 ##
 ## Compiler Architecture Switches
 ##
-ARCH_OPTS ?= -mcpu=cortex-a8 -D__ARM__  
+ARCH_OPTS ?= -mcpu=cortex-a8 -D__ARM__
 ARCH_OPTS += --pipe -B$(RTEMS_ARCH_LIB2) -B$(RTEMS_ARCH_LIB) -qrtems
 ARCH_OPTS += -DHAVE_DLFCN_H=1 -DHAVE_RTEMS_PCI_H=1
 
@@ -75,7 +75,7 @@ OBJS += rki_hello_cmd.o
 OBJS += rki_dhrystone_cmd.o
 OBJS += rki_whetstone_cmd.o
 OBJS += rki_benchmarks.o
-OBJS += rki_accel_cmd.o
+OBJS += rki_mpu6050_cmd.o
 OBJS += sensor-mpu6050.o
 
 #
@@ -189,7 +189,7 @@ $(EXE_TARGET): $(OBJS) $(TAR_IMAGE)
 	$(OBJCOPY) -O binary --strip-all $(EXE_TARGET) $(BINARY_TARGET)
 	$(SIZE) $(EXE_TARGET)
 	gzip -9 $(BINARY_TARGET)
-	mkimage -A arm -O linux -T kernel -a 0x80000000 -e 0x80000000 -n RTEMS -d $(BINARY_TARGET).gz $(BEAGLE_UBOOT)	
+	mkimage -A arm -O linux -T kernel -a 0x80000000 -e 0x80000000 -n RTEMS -d $(BINARY_TARGET).gz $(BEAGLE_UBOOT)
 
 ##
 ## Make clean rule
@@ -199,4 +199,3 @@ clean::
 	-$(RM) $(TAR_IMAGE) tarfile
 	-$(RM) *.lis
 	-$(RM) dl-sym.o
-
