@@ -3,13 +3,6 @@
 #include <bsp.h>
 
 #include "sensor-mpu6050.h"
-#include <sys/ioctl.h>
-#include <sys/stat.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 
 #define TASK_ATTRIBUTES RTEMS_FLOATING_POINT
 

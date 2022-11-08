@@ -14,6 +14,12 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/ioctl.h>
+#include <sys/stat.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <string.h>
+#include <unistd.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -78,7 +84,7 @@ int sensor_mpu6050_set_conf(int fd);
 // I2C functions
 static int read_bytes(int fd, uint16_t i2c_address, uint8_t data_address, uint16_t nr_bytes, uint8_t **buff);
 
-static int sensor_mpu6050_set_reg_8(i2c_dev *dev, int ptr, uint8_t *val);
+static int sensor_mpu6050_set_reg_8(i2c_dev *dev, int ptr, uint8_t val);
 static int sensor_mpu6050_get_reg_8(uint8_t register_add, uint8_t **buff);
 
 #ifdef gyroscope_read

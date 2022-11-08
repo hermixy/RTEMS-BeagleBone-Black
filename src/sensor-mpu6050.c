@@ -46,7 +46,7 @@ int read_bytes(int fd, uint16_t i2c_address, uint8_t data_address, uint16_t nr_b
   return rv;
 }
 
-static int sensor_mpu6050_set_reg_8(i2c_dev *dev, int ptr, uint8_t *val){
+static int sensor_mpu6050_set_reg_8(i2c_dev *dev, int ptr, uint8_t val){
   uint8_t out[2] = { ptr, val };
   i2c_msg msgs[1] = {
     {
