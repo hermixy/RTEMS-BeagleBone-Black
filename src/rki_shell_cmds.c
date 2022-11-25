@@ -30,6 +30,9 @@ int rki_mpu6050_read_raw_command( int argc, char *argv[]);
 int rki_mpu6050_read_proc_command( int argc, char *argv[]);
 int rki_mpu6050_open_command( int argc, char *argv[]);
 
+int rki_ra02_open_command( int argc, char *argv[]);
+int rki_ra02_read_regVer_command( int argc, char *argv[]);
+
 /*
 **
 ** Start the RTEMS Shell.
@@ -93,6 +96,9 @@ int rki_add_local_cmds(void)
 
    rtems_shell_add_cmd("mpu6050readproc","misc","Read processed data from the MPU6050 accelerometer and gyroscope",rki_mpu6050_read_proc_command);
 
+   rtems_shell_add_cmd("ra02open","misc","Register and open the bus for the LoRa Ra-02 module",rki_ra02_open_command);
+
+   rtems_shell_add_cmd("ra02regVer","misc","Read the LoRa Ra-02 module's reg version register to test the SPI communication",rki_ra02_read_regVer_command);
 
    /*
    ** Add the target specific commands

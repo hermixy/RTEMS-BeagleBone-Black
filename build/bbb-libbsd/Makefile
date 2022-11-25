@@ -77,6 +77,8 @@ OBJS += rki_whetstone_cmd.o
 OBJS += rki_benchmarks.o
 OBJS += rki_mpu6050_cmd.o
 OBJS += sensor-mpu6050.o
+OBJS += rki_ra02_cmd.o
+OBJS += LoRa.o
 
 #
 # Target specific commands
