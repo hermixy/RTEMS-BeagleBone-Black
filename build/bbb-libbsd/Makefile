@@ -79,7 +79,7 @@ OBJS += rki_mpu6050_cmd.o
 OBJS += sensor-mpu6050.o
 OBJS += rki_ra02_cmd.o
 OBJS += LoRa.o
-
+OBJS += rki_ra02_test_cmd.o
 #
 # Target specific commands
 #
