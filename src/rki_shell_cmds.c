@@ -102,9 +102,9 @@ int rki_add_local_cmds(void)
 
    rtems_shell_add_cmd("spitest","misc","Test the SPI protocol",rki_spi_test_command);
 
-   rtems_shell_add_cmd("ra02open","misc","Register and open the bus for the LoRa Ra-02 module",rki_ra02_open_command);
-
-   rtems_shell_add_cmd("ra02regVer","misc","Read the LoRa Ra-02 module's reg version register to test the SPI communication",rki_ra02_read_regVer_command);
+   // rtems_shell_add_cmd("ra02open","misc","Register and open the bus for the LoRa Ra-02 module",rki_ra02_open_command);
+   //
+   // rtems_shell_add_cmd("ra02regVer","misc","Read the LoRa Ra-02 module's reg version register to test the SPI communication",rki_ra02_read_regVer_command);
 
    /*
    ** Add the target specific commands

@@ -77,8 +77,8 @@ OBJS += rki_whetstone_cmd.o
 OBJS += rki_benchmarks.o
 OBJS += rki_mpu6050_cmd.o
 OBJS += sensor-mpu6050.o
-OBJS += rki_ra02_cmd.o
-OBJS += LoRa.o
+# OBJS += rki_ra02_cmd.o
+# OBJS += LoRa.o
 OBJS += rki_ra02_test_cmd.o
 #
 # Target specific commands
@@ -192,6 +192,7 @@ $(EXE_TARGET): $(OBJS) $(TAR_IMAGE)
 	$(SIZE) $(EXE_TARGET)
 	gzip -9 $(BINARY_TARGET)
 	mkimage -A arm -O linux -T kernel -a 0x80000000 -e 0x80000000 -n RTEMS -d $(BINARY_TARGET).gz $(BEAGLE_UBOOT)
+	$(MAKE) clean
 
 ##
 ## Make clean rule
