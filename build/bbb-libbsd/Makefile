@@ -192,13 +192,15 @@ $(EXE_TARGET): $(OBJS) $(TAR_IMAGE)
 	$(SIZE) $(EXE_TARGET)
 	gzip -9 $(BINARY_TARGET)
 	mkimage -A arm -O linux -T kernel -a 0x80000000 -e 0x80000000 -n RTEMS -d $(BINARY_TARGET).gz $(BEAGLE_UBOOT)
-	$(MAKE) clean
+	@printf "\n%s\n" "Deleting files that won't be used..."
+	@$(MAKE) clean
+	@printf "%s\n" "Done!!"
 
 ##
 ## Make clean rule
 ##
 clean::
-	-$(RM) $(OBJS) $(EXE_TARGET) $(EXE_TARGET_PRE) $(BINARY_TARGET) $(BINARY_TARGET).gz
-	-$(RM) $(TAR_IMAGE) tarfile
-	-$(RM) *.lis
-	-$(RM) dl-sym.o
+	-@$(RM) $(OBJS) $(EXE_TARGET) $(EXE_TARGET_PRE) $(BINARY_TARGET) $(BINARY_TARGET).gz
+	-@$(RM) $(TAR_IMAGE) tarfile
+	-@$(RM) *.lis
+	-@$(RM) dl-sym.o
