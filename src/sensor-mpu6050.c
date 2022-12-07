@@ -10,7 +10,13 @@
 
 static const char bus_path[] = "/dev/i2c-2";
 
-int read_bytes(int fd, uint16_t i2c_address, uint8_t data_address, uint16_t nr_bytes, uint8_t **buff){
+static int sensor_mpu6050_ioctl(i2c_dev *dev, ioctl_command_t command, void *arg);
+static int read_bytes(int fd, uint16_t i2c_address, uint8_t data_address, uint16_t nr_bytes, uint8_t **buff);
+
+static int sensor_mpu6050_set_reg_8(i2c_dev *dev, int ptr, uint8_t val);
+static int sensor_mpu6050_get_reg_8(uint8_t register_add, uint8_t **buff);
+
+static int read_bytes(int fd, uint16_t i2c_address, uint8_t data_address, uint16_t nr_bytes, uint8_t **buff){
   int rv;
   uint8_t value[nr_bytes];
   i2c_msg msgs[] = {{
@@ -129,6 +135,8 @@ int sensor_mpu6050_set_conf(int fd){
 
 #ifdef gyroscope_read
 
+static int sensor_mpu6050_get_gyro_axis(uint8_t **buff, sensor_mpu6050_axis axis);
+
 int sensor_mpu6050_get_gyro(int16_t **buff){
 
 	uint8_t *tmp;
@@ -203,6 +211,8 @@ static int sensor_mpu6050_get_gyro_axis(uint8_t **buff, sensor_mpu6050_axis axis
 #endif
 
 #ifdef accelerometer_read
+
+static int sensor_mpu6050_get_accel_axis(uint8_t **buff, sensor_mpu6050_axis axis);
 
 int sensor_mpu6050_get_accel(int16_t **buff){
 
