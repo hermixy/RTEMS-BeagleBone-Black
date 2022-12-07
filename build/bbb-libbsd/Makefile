@@ -195,6 +195,7 @@ $(EXE_TARGET): $(OBJS) $(TAR_IMAGE)
 	@printf "\n%s\n" "Deleting files that won't be used..."
 	@$(MAKE) clean
 	@printf "%s\n" "Done!!"
+	@date +"Finished at: +%FT%T%z"
 
 ##
 ## Make clean rule
