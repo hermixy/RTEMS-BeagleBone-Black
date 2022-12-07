@@ -30,10 +30,8 @@ int rki_mpu6050_read_raw_command( int argc, char *argv[]);
 int rki_mpu6050_read_proc_command( int argc, char *argv[]);
 int rki_mpu6050_open_command( int argc, char *argv[]);
 
-int rki_spi_register_command( int argc, char *argv[]);
-int rki_spi_test_command( int argc, char *argv[]);
-int rki_ra02_open_command( int argc, char *argv[]);
-int rki_ra02_read_regVer_command( int argc, char *argv[]);
+int rki_genuC_send_command( int argc, char *argv[]);
+int rki_genuC_open_command( int argc, char *argv[]);
 
 /*
 **
@@ -98,13 +96,9 @@ int rki_add_local_cmds(void)
 
    rtems_shell_add_cmd("mpu6050readproc","misc","Read processed data from the MPU6050 accelerometer and gyroscope",rki_mpu6050_read_proc_command);
 
-   rtems_shell_add_cmd("spiregister","misc","Register the SPI device /dev/spi-0",rki_spi_register_command);
+   rtems_shell_add_cmd("genucopen","misc","Register and open the driver for the generic uC",rki_genuC_open_command);
 
-   rtems_shell_add_cmd("spitest","misc","Test the SPI protocol",rki_spi_test_command);
-
-   // rtems_shell_add_cmd("ra02open","misc","Register and open the bus for the LoRa Ra-02 module",rki_ra02_open_command);
-   //
-   // rtems_shell_add_cmd("ra02regVer","misc","Read the LoRa Ra-02 module's reg version register to test the SPI communication",rki_ra02_read_regVer_command);
+   rtems_shell_add_cmd("genuctest","misc","Send 0x03 0x06 0x09 to a generic uC",rki_genuC_send_command);
 
    /*
    ** Add the target specific commands
