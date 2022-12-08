@@ -51,9 +51,9 @@ Unzip the RTEMS Source Builder (RSB), the RTEMS sources and the RTEMS libbsd sou
 ```
 $ mkdir -p /home/edison369/quick-start/src
 $ cd /home/edison369/quick-start/src
-$ cp /home/edison369/Desktop/RTEMS-BeagleBone-Black/src/rtems.zip /home/edison369/quick-start/src/ && unzip rtems.zip
-$ cp /home/edison369/Desktop/RTEMS-BeagleBone-Black/src/rtems-libbsd.zip /home/edison369/quick-start/src/ && unzip rtems-libbsd.zip
-$ cp /home/edison369/Desktop/RTEMS-BeagleBone-Black/src/rsb.zip /home/edison369/quick-start/src/ && unzip rsb.zip
+$ cp /home/edison369/Desktop/RTEMS-BeagleBone-Black/Resources/RTEMS_src/rtems.zip /home/edison369/quick-start/src/ && unzip rtems.zip
+$ cp /home/edison369/Desktop/RTEMS-BeagleBone-Black/Resources/RTEMS_src/rtems-libbsd.zip /home/edison369/quick-start/src/ && unzip rtems-libbsd.zip
+$ cp /home/edison369/Desktop/RTEMS-BeagleBone-Black/Resources/RTEMS_src/rsb.zip /home/edison369/quick-start/src/ && unzip rsb.zip
 $ mv rtems-source-builder-bb9e049b103f3a47019a6cfad18e2b59c9e9ea97/ rsb
 $ mv rtems-8657986989f5c39444c8781a8bf76d8f48730b41/ rtems
 $ cd rsb && ./source-builder/sb-check
@@ -68,7 +68,7 @@ $ rm -rf rsb
 Build the RTEMS BeagleBone Black BSP with the testsuites:
 ```
 $ cd rtems/
-$ cp /home/edison369/Desktop/RTEMS-BeagleBone-Black/src/config.ini /home/edison369/quick-start/src/rtems/
+$ cp /home/edison369/Desktop/RTEMS-BeagleBone-Black/Resources/RTEMS_src/config.ini /home/edison369/quick-start/src/rtems/
 $ ./waf configure     --prefix=/home/edison369/quick-start/rtems/6
 $ ./waf
 $ ./waf install
@@ -98,12 +98,12 @@ If the BeagleBone Black is going to be connected to the computer via USB, suposi
 $ sudo adduser edison369 dialout
 $ sudo apt install screen
 ```
-	
+
 In order to monitor the serial port, we first need to determine it's Linux device name:
 ```
 $ ls -l /dev/ttyUSB* /dev/ttyACM*
 ```
-	
+
 To use screen and connect to the BeagleBone Black, suposing the device name is **ttyUSB0**:
 ```
 $ sudo screen /dev/ttyUSB0 115200
@@ -124,7 +124,7 @@ RTEMS_BSP_BASE ?= /home/edison369/quick-start/rtems/6
 
 3. Run make to build the executable:
 ```
-$ make 
+$ make
 ```
 
 4. Run clean to get rid of all the files created, except the kernel image:
@@ -135,7 +135,7 @@ $ make clean
 ### Note
 You'll notice that in order to build a kernel image, you just need an executable (.exe or .elf) and with the command:
 ```
-$ arm-rtems6-objcopy -Obinary <executable file> kernel.img 
+$ arm-rtems6-objcopy -Obinary <executable file> kernel.img
 ```
 You'll get a kernel image. This is what is done in [Kernel Image sample 📦](<#kernel-image-sample->) and the [MakeFile](https://github.com/edison369/RTEMS-BeagleBone-Black/blob/main/build/rpi2/Makefile)
 
@@ -172,7 +172,7 @@ There are quite a few more commands to run, just type
 # help
 ```
 
-You can also add your own commands, and include a startup script 
+You can also add your own commands, and include a startup script
 
 Check out what the startup script is doing by typing:
 ```
