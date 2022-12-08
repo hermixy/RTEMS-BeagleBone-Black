@@ -79,6 +79,7 @@ OBJS += rki_mpu6050_cmd.o
 OBJS += sensor-mpu6050.o
 OBJS += rki_genuc_cmd.o
 OBJS += gen-uC.o
+OBJS += rki_cfsTest_cmd.o
 
 #
 # Target specific commands
