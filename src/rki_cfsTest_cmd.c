@@ -20,6 +20,7 @@ rtems_task genuC_telemetry_test(rtems_task_argument unused){
   // Telemetry_Payload initialization
   Telemetry_Payload.CommandCounter = 100;
   Telemetry_Payload.CommandErrorCounter = 0;
+  Telemetry_Payload.AppID = 1;
 
   printf("Opening the genuC driver...\n");
   genuC_driver_open();
@@ -55,6 +56,8 @@ rtems_task genuC_telemetry_test(rtems_task_argument unused){
       }
   }
 
+  val[28] = Telemetry_Payload.AppID;
+
   // Send the telemetry payload
   printf("Sending telemetry payload sent correctly...\n");
   rv = uC_set_bytes(UC_ADDRESS, &val, PAYLOAD_BYTES);
@@ -79,6 +82,7 @@ static void printPayload(){
   printf("\t[GyroRead][0] = %f\n", Telemetry_Payload.GyroRead[0]);
   printf("\t[GyroRead][1] = %f\n", Telemetry_Payload.GyroRead[1]);
   printf("\t[GyroRead][2] = %f\n", Telemetry_Payload.GyroRead[2]);
+  printf("\t[AppID] = 000%d\n", Telemetry_Payload.AppID);
 }
 
 static void genuC_driver_open(){
