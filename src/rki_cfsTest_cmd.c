@@ -18,9 +18,10 @@ rtems_task genuC_telemetry_test(rtems_task_argument unused){
   int rv;
 
   // Telemetry_Payload initialization
-  Telemetry_Payload.CommandCounter = 100;
+  Telemetry_Payload.AppID[0] = 0x08;
+  Telemetry_Payload.AppID[1] = 0xE0;
   Telemetry_Payload.CommandErrorCounter = 0;
-  Telemetry_Payload.AppID = 1;
+  Telemetry_Payload.CommandCounter = 100;
 
   printf("Opening the genuC driver...\n");
   genuC_driver_open();
@@ -34,8 +35,10 @@ rtems_task genuC_telemetry_test(rtems_task_argument unused){
   val = NULL;
   val = malloc(PAYLOAD_BYTES * sizeof(uint8_t));
 
-  val[0] = Telemetry_Payload.CommandCounter;
-  val[1] = Telemetry_Payload.CommandErrorCounter;
+  val[0] = Telemetry_Payload.AppID[0];
+  val[1] = Telemetry_Payload.AppID[1];
+  val[2] = Telemetry_Payload.CommandErrorCounter;
+  val[3] = Telemetry_Payload.CommandCounter;
 
   uint8_t *aux_array;
   for(int i=0;i<3;i++){
@@ -43,7 +46,7 @@ rtems_task genuC_telemetry_test(rtems_task_argument unused){
       aux_array = malloc(4 * sizeof(uint8_t));
       aux_array = (uint8_t*)(&Telemetry_Payload.AccelRead[i]);
       for(int j=0;j<4;j++){
-          val[(i+1)*4+j] = aux_array[j];
+          val[(i+1)*4+j+2] = aux_array[j];
       }
   }
 
@@ -52,11 +55,10 @@ rtems_task genuC_telemetry_test(rtems_task_argument unused){
       aux_array = malloc(4 * sizeof(uint8_t));
       aux_array = (uint8_t*)(&Telemetry_Payload.GyroRead[i]);
       for(int j=0;j<4;j++){
-          val[(i+4)*4+j] = aux_array[j];
+          val[(i+4)*4+j+2] = aux_array[j];
       }
   }
 
-  val[28] = Telemetry_Payload.AppID;
 
   // Send the telemetry payload
   printf("Sending telemetry payload sent correctly...\n");
@@ -72,8 +74,9 @@ rtems_task genuC_telemetry_test(rtems_task_argument unused){
 
 static void printPayload(){
   printf("Telemetry_Payload:\n");
-  printf("\t[CommandCounter] = %d\n", Telemetry_Payload.CommandCounter);
+  printf("\t[AppID] = 0x%x%x\n", Telemetry_Payload.AppID[0], Telemetry_Payload.AppID[1]);
   printf("\t[CommandErrorCounter] = %d\n", Telemetry_Payload.CommandErrorCounter);
+  printf("\t[CommandCounter] = %d\n", Telemetry_Payload.CommandCounter);
   printf("\t[spare][0] = \n");
   printf("\t[spare][1] = \n");
   printf("\t[AccelRead][0] = %f\n", Telemetry_Payload.AccelRead[0]);
@@ -82,7 +85,6 @@ static void printPayload(){
   printf("\t[GyroRead][0] = %f\n", Telemetry_Payload.GyroRead[0]);
   printf("\t[GyroRead][1] = %f\n", Telemetry_Payload.GyroRead[1]);
   printf("\t[GyroRead][2] = %f\n", Telemetry_Payload.GyroRead[2]);
-  printf("\t[AppID] = 000%d\n", Telemetry_Payload.AppID);
 }
 
 static void genuC_driver_open(){
