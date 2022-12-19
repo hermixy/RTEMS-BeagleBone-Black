@@ -33,6 +33,8 @@ int rki_mpu6050_open_command( int argc, char *argv[]);
 int rki_genuC_send_command( int argc, char *argv[]);
 int rki_genuC_open_command( int argc, char *argv[]);
 
+int rki_genuC_telemetry_test_command( int argc, char *argv[]);
+
 /*
 **
 ** Start the RTEMS Shell.
@@ -99,6 +101,8 @@ int rki_add_local_cmds(void)
    rtems_shell_add_cmd("genucopen","misc","Register and open the driver for the generic uC",rki_genuC_open_command);
 
    rtems_shell_add_cmd("genuctest","misc","Send 0x03 0x06 0x09 to a generic uC",rki_genuC_send_command);
+
+   rtems_shell_add_cmd("telemtest","misc","Send a Telemetry payload via I2C",rki_genuC_telemetry_test_command);
 
    /*
    ** Add the target specific commands
