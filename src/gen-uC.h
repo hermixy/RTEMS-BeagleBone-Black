@@ -27,12 +27,6 @@ extern "C" {
 // Device address
 #define UC_ADDRESS 0x36
 
-// Registers to read
-// #define EX_READ_REG      0x3B
-
-// Control registers
-// #define EX_CTRL_REG	           0x06
-
 /**
  * @defgroup I2CMicroController Driver
  *

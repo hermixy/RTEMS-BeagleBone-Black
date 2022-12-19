@@ -26,7 +26,7 @@ static const char mpu6050_path[] = "/dev/i2c-2.mpu6050-0";
 
 typedef struct
 {
-    uint8_t AppID[2];    // 1 byte
+    uint8_t AppID[2];             // 2 byte
     uint8_t CommandErrorCounter;    // 1 byte
     uint8_t CommandCounter;         // 1 byte
     uint8_t spare[2];               // 2 bytes
