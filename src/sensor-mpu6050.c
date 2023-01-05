@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @brief Accelerometer Sensor MPU6050 Driver Implementation
+ * @brief IMU Sensor MPU6050 Driver Implementation
  *
  * @ingroup I2CSensorMPU6050
  */

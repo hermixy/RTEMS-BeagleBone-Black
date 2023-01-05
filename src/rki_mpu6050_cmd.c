@@ -13,30 +13,6 @@ static const char mpu6050_path[] = "/dev/i2c-2.mpu6050-0";
 rtems_task mpu6050_read_raw(rtems_task_argument unused){
 
   int rv;
-  int fd;
-
-  // Device registration
-  rv = i2c_dev_register_sensor_mpu6050(
-    &bus_path[0],
-    &mpu6050_path[0]
-  );
-  if(rv == 0)
-    printf("Device registered correctly at %s\n",mpu6050_path);
-
-  fd = open(&mpu6050_path[0], O_RDWR);
-  if(fd >= 0)
-    printf("Device opened correctly...\n");
-
-  // Device configuration
-  rv = sensor_mpu6050_set_conf(fd);
-  printf("Device configured correctly...\n");
-
-  close(fd);
-
-  fd = open(&bus_path[0], O_RDWR);
-  if(fd >= 0)
-    printf("Bus opened correctly...\n");
-  close(fd);
 
   //Data reading
   int16_t *accel_buff;
@@ -68,30 +44,6 @@ rtems_task mpu6050_read_raw(rtems_task_argument unused){
 rtems_task mpu6050_read_proc(rtems_task_argument unused){
 
   int rv;
-  int fd;
-
-  // Device registration
-  rv = i2c_dev_register_sensor_mpu6050(
-    &bus_path[0],
-    &mpu6050_path[0]
-  );
-  if(rv == 0)
-    printf("Device registered correctly at %s\n",mpu6050_path);
-
-  fd = open(&mpu6050_path[0], O_RDWR);
-  if(fd >= 0)
-    printf("Device opened correctly...\n");
-
-  // Device configuration
-  rv = sensor_mpu6050_set_conf(fd);
-  printf("Device configured correctly...\n");
-
-  close(fd);
-
-  fd = open(&bus_path[0], O_RDWR);
-  if(fd >= 0)
-    printf("Bus opened correctly...\n");
-  close(fd);
 
   //Data reading
   int16_t *accel_buff;
@@ -167,7 +119,7 @@ int rki_mpu6050_read_raw_command( int argc, char *argv[]){
 	printf( "\n\n*** MPU6050 Raw Data ***\n" );
 	printf( "Read the accelerometer and gyroscope values\n\n" );
 
-	task_name = rtems_build_name( 'A', 'X', 'E', '1' );
+	task_name = rtems_build_name( 'I', 'M', 'U', '2' );
 
 	status = rtems_task_create(
 	task_name, 1, RTEMS_MINIMUM_STACK_SIZE * 2, RTEMS_DEFAULT_MODES,
@@ -175,13 +127,13 @@ int rki_mpu6050_read_raw_command( int argc, char *argv[]){
 	);
 	if ( status != RTEMS_SUCCESSFUL )
 	{
-		printf("Error creating Accelerometer Raw Data\n");
+		printf("Error creating IMU Raw Data\n");
 	}
 
 	status = rtems_task_start(task_id, mpu6050_read_raw, 0);
 	if ( status != RTEMS_SUCCESSFUL )
 	{
-		printf("Error Starting Accelerometer Raw Data\n");
+		printf("Error Starting IMU Raw Data\n");
 	}
 
 	return(0);
@@ -195,7 +147,7 @@ int rki_mpu6050_read_proc_command( int argc, char *argv[]){
 	printf( "\n\n*** MPU6050 Processed Data ***\n" );
 	printf( "Read the accelerometer and gyroscope values\n\n" );
 
-	task_name = rtems_build_name( 'A', 'X', 'E', '2' );
+	task_name = rtems_build_name( 'I', 'M', 'U', '3' );
 
 	status = rtems_task_create(
 	task_name, 1, RTEMS_MINIMUM_STACK_SIZE * 2, RTEMS_DEFAULT_MODES,
@@ -203,13 +155,13 @@ int rki_mpu6050_read_proc_command( int argc, char *argv[]){
 	);
 	if ( status != RTEMS_SUCCESSFUL )
 	{
-		printf("Error creating Accelerometer Processed Data\n");
+		printf("Error creating IMU Processed Data\n");
 	}
 
 	status = rtems_task_start(task_id, mpu6050_read_proc, 0);
 	if ( status != RTEMS_SUCCESSFUL )
 	{
-		printf("Error Starting Accelerometer Processed Data\n");
+		printf("Error Starting IMU Processed Data\n");
 	}
 
 	return(0);
@@ -221,9 +173,9 @@ int rki_mpu6050_open_command( int argc, char *argv[]){
 	rtems_name task_name;       /* task name */
 
 	printf( "\n\n*** MPU6050 Dev Registration ***\n" );
-	printf( "Register and open the driver for the accelerometer\n\n" );
+	printf( "Register and open the driver for the IMU\n\n" );
 
-	task_name = rtems_build_name( 'A', 'X', 'E', '3' );
+	task_name = rtems_build_name( 'I', 'M', 'U', '1' );
 
 	status = rtems_task_create(
 	task_name, 1, RTEMS_MINIMUM_STACK_SIZE * 2, RTEMS_DEFAULT_MODES,
@@ -231,13 +183,13 @@ int rki_mpu6050_open_command( int argc, char *argv[]){
 	);
 	if ( status != RTEMS_SUCCESSFUL )
 	{
-		printf("Error creating Accelerometer Dev Registration\n");
+		printf("Error creating IMU Dev Registration\n");
 	}
 
 	status = rtems_task_start(task_id, mpu6050_open, 0);
 	if ( status != RTEMS_SUCCESSFUL )
 	{
-		printf("Error Starting Accelerometer Dev Registration\n");
+		printf("Error Starting IMU Dev Registration\n");
 	}
 
 	return(0);

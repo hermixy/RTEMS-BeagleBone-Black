@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @brief Accelerometer Sensor MPU6050 Driver API
+ * @brief IMU Sensor MPU6050 Driver API
  *
  * @ingroup I2CSensorMPU6050
  */
@@ -54,11 +54,11 @@ extern "C" {
 #define PWR_MGT_2          0x6C
 
 /**
- * @defgroup I2CSensorMPU6050 Accelerometer Sensor MPU6050 Driver
+ * @defgroup I2CSensorMPU6050 IMU Sensor MPU6050 Driver
  *
  * @ingroup I2CDevice
  *
- * @brief Driver for MPU6050 accelerometer sensor.
+ * @brief Driver for MPU6050 IMU sensor.
  *
  * @{
  */
