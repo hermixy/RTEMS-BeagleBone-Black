@@ -75,11 +75,17 @@ OBJS += rki_hello_cmd.o
 OBJS += rki_dhrystone_cmd.o
 OBJS += rki_whetstone_cmd.o
 OBJS += rki_benchmarks.o
+
 OBJS += rki_mpu6050_cmd.o
 OBJS += sensor-mpu6050.o
+
 OBJS += rki_genuc_cmd.o
 OBJS += gen-uC.o
+
 OBJS += rki_cfsTest_cmd.o
+
+OBJS += rki_aht10_cmd.o
+OBJS += sensor-aht10.o
 
 #
 # Target specific commands

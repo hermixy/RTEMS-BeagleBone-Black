@@ -26,14 +26,21 @@ int  whetstone_command( int argc, char *argv[]);
 void rki_add_dl_commands(void);
 void rki_add_target_cmds(void);
 
+// MPU6050 commands
+int rki_mpu6050_open_command( int argc, char *argv[]);
 int rki_mpu6050_read_raw_command( int argc, char *argv[]);
 int rki_mpu6050_read_proc_command( int argc, char *argv[]);
-int rki_mpu6050_open_command( int argc, char *argv[]);
 
+// Gen uC commands
 int rki_genuC_send_command( int argc, char *argv[]);
 int rki_genuC_open_command( int argc, char *argv[]);
 
+// cFS telemetry with Gen uC commands
 int rki_genuC_telemetry_test_command( int argc, char *argv[]);
+
+// AHT10 commands
+int rki_aht10_open_command( int argc, char *argv[]);
+int rki_aht10_read_proc_command( int argc, char *argv[]);
 
 /*
 **
@@ -103,6 +110,10 @@ int rki_add_local_cmds(void)
    rtems_shell_add_cmd("genuctest","misc","Send 0x03 0x06 0x09 to a generic uC",rki_genuC_send_command);
 
    rtems_shell_add_cmd("telemtest","misc","Send a Telemetry payload via I2C",rki_genuC_telemetry_test_command);
+
+   rtems_shell_add_cmd("aht10open","misc","Register and open the AHT10 driver",rki_aht10_open_command);
+
+   rtems_shell_add_cmd("aht10read","misc","Read temperature and humidity from the AHT10 sensor",rki_aht10_read_proc_command);
 
    /*
    ** Add the target specific commands
