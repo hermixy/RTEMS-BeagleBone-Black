@@ -10,7 +10,7 @@
 
 SENSOR_AHT10_Data_t SENSOR_AHT10_Data;
 
-static const char bus_path[] = "/dev/i2c-2";
+static const char bus_path[] = "/dev/i2c-1";
 
 // Prototypes
 static int sensor_aht10_ioctl(i2c_dev *dev, ioctl_command_t command, void *arg);

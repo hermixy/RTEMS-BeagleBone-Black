@@ -6,8 +6,8 @@
 
 #define TASK_ATTRIBUTES RTEMS_FLOATING_POINT
 
-static const char bus_path[] = "/dev/i2c-2";
-static const char aht10_path[] = "/dev/i2c-2.aht10-0";
+static const char bus_path[] = "/dev/i2c-1";
+static const char aht10_path[] = "/dev/i2c-1.aht10-0";
 
 
 rtems_task aht10_read_data(rtems_task_argument unused){
