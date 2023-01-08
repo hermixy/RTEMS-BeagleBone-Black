@@ -12,8 +12,6 @@ static const char mpu6050_path[] = "/dev/i2c-2.mpu6050-0";
 
 rtems_task mpu6050_read_raw(rtems_task_argument unused){
 
-  int rv;
-
   //Data reading
   int16_t *accel_buff;
   int16_t *gyro_buff;
@@ -21,20 +19,20 @@ rtems_task mpu6050_read_raw(rtems_task_argument unused){
   printf("\n*** Accelerometer reading ***\n");
   for (int i = 0; i < 50; i++) {
     accel_buff = NULL;
-    rv = sensor_mpu6050_get_accel(&accel_buff);
+    sensor_mpu6050_get_accel(&accel_buff);
     printf("Ax = %d \t Ay = %d \t Az = %d\n",accel_buff[0], accel_buff[1], accel_buff[2]);
 
-    rv = rtems_task_wake_after( 0.1 * rtems_clock_get_ticks_per_second() );
+    rtems_task_wake_after( 0.1 * rtems_clock_get_ticks_per_second() );
   }
   free(accel_buff);
 
   printf("\n\n*** Gyroscope reading ***\n");
   for (int i = 0; i < 50; i++) {
     gyro_buff = NULL;
-    rv = sensor_mpu6050_get_gyro(&gyro_buff);
+    sensor_mpu6050_get_gyro(&gyro_buff);
     printf("Gx = %d \t Gy = %d \t Gz = %d\n",gyro_buff[0], gyro_buff[1], gyro_buff[2]);
 
-    rv = rtems_task_wake_after( 0.1 * rtems_clock_get_ticks_per_second() );
+    rtems_task_wake_after( 0.1 * rtems_clock_get_ticks_per_second() );
   }
   free(gyro_buff);
 
@@ -43,8 +41,6 @@ rtems_task mpu6050_read_raw(rtems_task_argument unused){
 
 rtems_task mpu6050_read_proc(rtems_task_argument unused){
 
-  int rv;
-
   //Data reading
   int16_t *accel_buff;
   int16_t *gyro_buff;
@@ -52,28 +48,28 @@ rtems_task mpu6050_read_proc(rtems_task_argument unused){
   printf("\n*** Accelerometer reading in m/s2***\n");
   for (int i = 0; i < 50; i++) {
     accel_buff = NULL;
-    rv = sensor_mpu6050_get_accel(&accel_buff);
+    sensor_mpu6050_get_accel(&accel_buff);
 
     float ax_m_s2 = accel_buff[0] * (9.81/16384.0);
     float ay_m_s2 = accel_buff[1] * (9.81/16384.0);
     float az_m_s2 = accel_buff[2] * (9.81/16384.0);
     printf("Ax = %.2f \t Ay = %.2f \t Az = %.2f\n",ax_m_s2, ay_m_s2, az_m_s2);
 
-    rv = rtems_task_wake_after( 0.1 * rtems_clock_get_ticks_per_second() );
+    rtems_task_wake_after( 0.1 * rtems_clock_get_ticks_per_second() );
   }
   free(accel_buff);
 
   printf("\n\n*** Gyroscope reading in deg/s***\n");
   for (int i = 0; i < 50; i++) {
     gyro_buff = NULL;
-    rv = sensor_mpu6050_get_gyro(&gyro_buff);
+    sensor_mpu6050_get_gyro(&gyro_buff);
 
     float gx_deg_s = gyro_buff[0] * (250.0/32768.0);
     float gy_deg_s = gyro_buff[1] * (250.0/32768.0);
     float gz_deg_s = gyro_buff[2] * (250.0/32768.0);
     printf("Gx = %.2f \t Gy = %.2f \t Gz = %.2f\n",gx_deg_s, gy_deg_s, gz_deg_s);
 
-    rv = rtems_task_wake_after( 0.1 * rtems_clock_get_ticks_per_second() );
+    rtems_task_wake_after( 0.1 * rtems_clock_get_ticks_per_second() );
   }
   free(gyro_buff);
 
