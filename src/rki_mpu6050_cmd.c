@@ -16,7 +16,7 @@ rtems_task mpu6050_read_raw(rtems_task_argument unused){
   int16_t *accel_buff;
   int16_t *gyro_buff;
 
-  printf("\n*** Accelerometer reading ***\n");
+  printf("\n*** MPU6050 Accelerometer reading ***\n");
   for (int i = 0; i < 50; i++) {
     accel_buff = NULL;
     sensor_mpu6050_get_accel(&accel_buff);
@@ -26,7 +26,7 @@ rtems_task mpu6050_read_raw(rtems_task_argument unused){
   }
   free(accel_buff);
 
-  printf("\n\n*** Gyroscope reading ***\n");
+  printf("\n\n*** MPU6050 Gyroscope reading ***\n");
   for (int i = 0; i < 50; i++) {
     gyro_buff = NULL;
     sensor_mpu6050_get_gyro(&gyro_buff);
@@ -45,7 +45,7 @@ rtems_task mpu6050_read_proc(rtems_task_argument unused){
   int16_t *accel_buff;
   int16_t *gyro_buff;
 
-  printf("\n*** Accelerometer reading in m/s2***\n");
+  printf("\n*** MPU6050 Accelerometer reading in m/s2***\n");
   for (int i = 0; i < 50; i++) {
     accel_buff = NULL;
     sensor_mpu6050_get_accel(&accel_buff);
@@ -59,7 +59,7 @@ rtems_task mpu6050_read_proc(rtems_task_argument unused){
   }
   free(accel_buff);
 
-  printf("\n\n*** Gyroscope reading in deg/s***\n");
+  printf("\n\n*** MPU6050 Gyroscope reading in deg/s***\n");
   for (int i = 0; i < 50; i++) {
     gyro_buff = NULL;
     sensor_mpu6050_get_gyro(&gyro_buff);
@@ -72,6 +72,17 @@ rtems_task mpu6050_read_proc(rtems_task_argument unused){
     rtems_task_wake_after( 0.1 * rtems_clock_get_ticks_per_second() );
   }
   free(gyro_buff);
+
+	rtems_task_delete( RTEMS_SELF );    /* should not return */
+}
+
+rtems_task mpu6050_read_temp(rtems_task_argument unused){
+
+  //Data reading
+  printf("\n*** MPU6050 Temperature reading ***\n");
+
+  float temp = sensor_mpu6050_get_temp();
+  printf("Temperature = %.3f +-1C\n",temp);
 
 	rtems_task_delete( RTEMS_SELF );    /* should not return */
 }
@@ -158,6 +169,34 @@ int rki_mpu6050_read_proc_command( int argc, char *argv[]){
 	if ( status != RTEMS_SUCCESSFUL )
 	{
 		printf("Error Starting IMU Processed Data\n");
+	}
+
+	return(0);
+}
+
+int rki_mpu6050_read_temp_command( int argc, char *argv[]){
+	rtems_status_code status;
+	rtems_id   task_id;         /* task id */
+	rtems_name task_name;       /* task name */
+
+	printf( "\n\n*** MPU6050 Temperature ***\n" );
+	printf( "Read the temperature registered by the MPU6050\n\n" );
+
+	task_name = rtems_build_name( 'I', 'M', 'U', '4' );
+
+	status = rtems_task_create(
+	task_name, 1, RTEMS_MINIMUM_STACK_SIZE * 2, RTEMS_DEFAULT_MODES,
+	TASK_ATTRIBUTES, &task_id
+	);
+	if ( status != RTEMS_SUCCESSFUL )
+	{
+		printf("Error creating IMU Temperature\n");
+	}
+
+	status = rtems_task_start(task_id, mpu6050_read_temp, 0);
+	if ( status != RTEMS_SUCCESSFUL )
+	{
+		printf("Error Starting IMU Temperature\n");
 	}
 
 	return(0);

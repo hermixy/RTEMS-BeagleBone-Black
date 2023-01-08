@@ -28,13 +28,15 @@ extern "C" {
 // Device address when ADO = 0
 #define MPU6050_ADDRESS 0x68
 
-// Registers to read the accelerometer and gyroscope
+// Registers to read the accelerometer, gyroscope and temperature
 #define ACCEL_XOUT_H       0x3B
 #define ACCEL_XOUT_L       0x3C
 #define ACCEL_YOUT_H       0x3D
 #define ACCEL_YOUT_L       0x3E
 #define ACCEL_ZOUT_H       0x3F
 #define ACCEL_ZOUT_L       0x40
+#define TEMP_OUT_H         0x41
+#define TEMP_OUT_L         0x42
 #define GYRO_XOUT_H        0x43
 #define GYRO_XOUT_L        0x44
 #define GYRO_YOUT_H        0x45
@@ -64,6 +66,7 @@ extern "C" {
  */
 #define gyroscope_read
 #define accelerometer_read
+#define temperature_read
 
 typedef enum {
   SENSOR_MPU6050_SET_CONF
@@ -84,14 +87,17 @@ int sensor_mpu6050_set_conf(int fd);
 
 #ifdef gyroscope_read
 // Accelerometer functions
-int sensor_mpu6050_get_gyro(int16_t **buff);
-
+  int sensor_mpu6050_get_gyro(int16_t **buff);
 #endif
 
 #ifdef accelerometer_read
 // Accelerometer functions
-int sensor_mpu6050_get_accel(int16_t **buff);
+  int sensor_mpu6050_get_accel(int16_t **buff);
+#endif
 
+#ifdef temperature_read
+// Accelerometer functions
+  float sensor_mpu6050_get_temp(void);
 #endif
 
 /** @} */

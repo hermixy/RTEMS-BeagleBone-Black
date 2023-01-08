@@ -26,6 +26,17 @@ rtems_task mpl3115a2_read_altitude(rtems_task_argument unused){
 	rtems_task_delete( RTEMS_SELF );    /* should not return */
 }
 
+rtems_task mpl3115a2_read_temp(rtems_task_argument unused){
+
+  printf("\n*** MPL3115A2 Temperature reading ***\n");
+
+  float temperature;
+  temperature = sensor_mpl3115a2_getTemperature();
+  printf("Temperature: %.3f +-1C\n",temperature);
+
+	rtems_task_delete( RTEMS_SELF );    /* should not return */
+}
+
 rtems_task mpl3115a2_open(rtems_task_argument unused){
 
   int rv;
@@ -84,6 +95,34 @@ int rki_mpl3115a2_read_alt_command( int argc, char *argv[]){
 	if ( status != RTEMS_SUCCESSFUL )
 	{
 		printf("Error Starting MPL3115A2 Altitude Data\n");
+	}
+
+	return(0);
+}
+
+int rki_mpl3115a2_read_temp_command( int argc, char *argv[]){
+	rtems_status_code status;
+	rtems_id   task_id;         /* task id */
+	rtems_name task_name;       /* task name */
+
+	printf( "\n\n*** MPL3115A2 Temperature Data ***\n" );
+	printf( "Read the temperature data\n\n" );
+
+	task_name = rtems_build_name( 'A', 'L', 'T', '3' );
+
+	status = rtems_task_create(
+	task_name, 1, RTEMS_MINIMUM_STACK_SIZE * 2, RTEMS_DEFAULT_MODES,
+	TASK_ATTRIBUTES, &task_id
+	);
+	if ( status != RTEMS_SUCCESSFUL )
+	{
+		printf("Error creating MPL3115A2 Temperature Data\n");
+	}
+
+	status = rtems_task_start(task_id, mpl3115a2_read_temp, 0);
+	if ( status != RTEMS_SUCCESSFUL )
+	{
+		printf("Error Starting MPL3115A2 Temperature Data\n");
 	}
 
 	return(0);

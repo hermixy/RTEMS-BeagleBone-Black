@@ -30,6 +30,7 @@ void rki_add_target_cmds(void);
 int rki_mpu6050_open_command( int argc, char *argv[]);
 int rki_mpu6050_read_raw_command( int argc, char *argv[]);
 int rki_mpu6050_read_proc_command( int argc, char *argv[]);
+int rki_mpu6050_read_temp_command( int argc, char *argv[]);
 
 // Gen uC commands
 int rki_genuC_send_command( int argc, char *argv[]);
@@ -45,6 +46,7 @@ int rki_aht10_read_proc_command( int argc, char *argv[]);
 // MPL3115A2 commands
 int rki_mpl3115a2_open_command( int argc, char *argv[]);
 int rki_mpl3115a2_read_alt_command( int argc, char *argv[]);
+int rki_mpl3115a2_read_temp_command( int argc, char *argv[]);
 
 /*
 **
@@ -109,6 +111,8 @@ int rki_add_local_cmds(void)
 
    rtems_shell_add_cmd("mpu6050readproc","misc","Read processed data from the MPU6050 accelerometer and gyroscope",rki_mpu6050_read_proc_command);
 
+   rtems_shell_add_cmd("mpu6050readtemp","misc","Read the temperature registered by the MPU6050",rki_mpu6050_read_temp_command);
+
    rtems_shell_add_cmd("genucopen","misc","Register and open the driver for the generic uC",rki_genuC_open_command);
 
    rtems_shell_add_cmd("genuctest","misc","Send 0x03 0x06 0x09 to a generic uC",rki_genuC_send_command);
@@ -122,6 +126,8 @@ int rki_add_local_cmds(void)
    rtems_shell_add_cmd("mpl3115a2open","misc","Register and open the MPL3115A2 driver",rki_mpl3115a2_open_command);
 
    rtems_shell_add_cmd("mpl3115a2readalt","misc","Read the altitude data from the MPL3115A2 sensor",rki_mpl3115a2_read_alt_command);
+
+   rtems_shell_add_cmd("mpl3115a2readtemp","misc","Read the temperature registered by the MPL3115A2",rki_mpl3115a2_read_temp_command);
 
    /*
    ** Add the target specific commands

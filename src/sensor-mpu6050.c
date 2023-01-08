@@ -102,9 +102,10 @@ static int sensor_mpu6050_ioctl(i2c_dev *dev, ioctl_command_t command, void *arg
 
   switch (command) {
     case SENSOR_MPU6050_SET_CONF:
-      err = sensor_mpu6050_set_reg_8(dev, PWR_MGT_1, 0x08);                     //Temp sensor disabled, internal 8MHz oscillator and cycle disabled
+      err = sensor_mpu6050_set_reg_8(dev, PWR_MGT_1, 0x00);                     //Temp sensor enabled, internal 8MHz oscillator and cycle disabled
       err = err + sensor_mpu6050_set_reg_8(dev, SIGNAL_PATH_RESET, 0b00000111); //Accelerometer, Gyroscope and Thermometer path reset
       err = err + sensor_mpu6050_set_reg_8(dev, ACCEL_CONFIG, 0b00000001);      //5Hz filter +-2g
+      err = err + sensor_mpu6050_set_reg_8(dev, GYRO_CONFIG, 0b00000000);       //+-250 deg/s
       err = err + sensor_mpu6050_set_reg_8(dev, INT_ENABLE, 1<<WOM_EN);         //Disables interrupts in MPU6050
       break;
 
@@ -284,5 +285,34 @@ static int sensor_mpu6050_get_accel_axis(uint8_t **buff, sensor_mpu6050_axis axi
   }
 
   return err;
+}
+#endif
+
+#ifdef temperature_read
+float sensor_mpu6050_get_temp(void){
+
+  int err = 0;
+
+  uint8_t *tmp;
+  tmp = NULL;
+
+  uint8_t raw_data[2];
+
+  err = sensor_mpu6050_get_reg_8(TEMP_OUT_H, &tmp);
+  raw_data[0] = (*tmp);
+  tmp = NULL;
+  err = err + sensor_mpu6050_get_reg_8(TEMP_OUT_L, &tmp);
+  raw_data[1] = (*tmp);
+
+  free(tmp);
+
+  if(err != 0){
+    printf("There was an error when reading temperature registers...\n");
+    return -1;
+  }
+
+  int16_t raw_temp = raw_data[0] << 8 | raw_data[1];
+
+  return (((float)raw_temp / 340.0) + 36.53);
 }
 #endif

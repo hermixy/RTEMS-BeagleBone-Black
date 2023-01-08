@@ -26,7 +26,7 @@ rtems_task aht10_read_data(rtems_task_argument unused){
   float temp_buff = sensor_aht10_get_temp();
   float humd_buff = sensor_aht10_get_humid();
 
-  printf("Temperature: %f +-0.3C\n",temp_buff);
+  printf("Temperature: %.3f +-0.3C\n",temp_buff);
   printf("Humidity: %f +-2%%\n",humd_buff);
 
 
