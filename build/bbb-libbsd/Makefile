@@ -87,6 +87,9 @@ OBJS += rki_cfsTest_cmd.o
 OBJS += rki_aht10_cmd.o
 OBJS += sensor-aht10.o
 
+OBJS += rki_mpl3115a2_cmd.o
+OBJS += sensor-mpl3115a2.o
+
 #
 # Target specific commands
 #

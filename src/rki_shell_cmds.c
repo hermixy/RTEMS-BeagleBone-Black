@@ -42,6 +42,10 @@ int rki_genuC_telemetry_test_command( int argc, char *argv[]);
 int rki_aht10_open_command( int argc, char *argv[]);
 int rki_aht10_read_proc_command( int argc, char *argv[]);
 
+// MPL3115A2 commands
+int rki_mpl3115a2_open_command( int argc, char *argv[]);
+int rki_mpl3115a2_read_alt_command( int argc, char *argv[]);
+
 /*
 **
 ** Start the RTEMS Shell.
@@ -114,6 +118,10 @@ int rki_add_local_cmds(void)
    rtems_shell_add_cmd("aht10open","misc","Register and open the AHT10 driver",rki_aht10_open_command);
 
    rtems_shell_add_cmd("aht10read","misc","Read temperature and humidity from the AHT10 sensor",rki_aht10_read_proc_command);
+
+   rtems_shell_add_cmd("mpl3115a2open","misc","Register and open the MPL3115A2 driver",rki_mpl3115a2_open_command);
+
+   rtems_shell_add_cmd("mpl3115a2readalt","misc","Read the altitude data from the MPL3115A2 sensor",rki_mpl3115a2_read_alt_command);
 
    /*
    ** Add the target specific commands
