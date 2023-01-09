@@ -139,22 +139,13 @@ int sensor_mpl3115a2_begin(int fd);
 
 
 // I2C functions
-#ifdef pressure_read
-  float sensor_mpl3115a2_getPressure(void);
-  float sensor_mpl3115a2_getAltitude(void);
-  int8_t sensor_mpl3115a2_getAltitudeOffset(void);
-  void sensor_mpl3115a2_setAltitudeOffset(int8_t offset);
-  void sensor_mpl3115a2_setSeaPressure(float SLP);
-#endif
+float sensor_mpl3115a2_getPressure(void);
+float sensor_mpl3115a2_getAltitude(void);
+int8_t sensor_mpl3115a2_getAltitudeOffset(void);
+void sensor_mpl3115a2_setAltitudeOffset(int8_t offset);
+void sensor_mpl3115a2_setSeaPressure(float SLP);
 
-#ifdef temperature_read
-  float sensor_mpl3115a2_getTemperature(void);
-#endif
-
-void sensor_mpl3115a2_setMode(mpl3115a2_mode_t mode);
-void sensor_mpl3115a2_startOneShot(void);
-bool sensor_mpl3115a2_conversionComplete(void);
-float sensor_mpl3115a2_getLastConversionResults(mpl3115a2_meas_t value);
+float sensor_mpl3115a2_getTemperature(void);
 
 /** @} */
 
