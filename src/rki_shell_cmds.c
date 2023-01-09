@@ -119,8 +119,8 @@ int rki_add_local_cmds(void)
    rtems_shell_add_cmd("aht10read","misc","Read temperature and humidity from the AHT10 sensor",rki_aht10_read_proc_command);
 
    rtems_shell_add_cmd("mpl3115a2open","misc","Register and open the MPL3115A2 driver",rki_mpl3115a2_open_command);
-   rtems_shell_add_cmd("mpl3115a2readalt","misc","Read the altitude data from the MPL3115A2 sensor",rki_mpl3115a2_read_alt_command);
-   rtems_shell_add_cmd("mpl3115a2readtemp","misc","Read the temperature registered by the MPL3115A2",rki_mpl3115a2_read_temp_command);
+   rtems_shell_add_cmd("mpl3115a2read","misc","Read the altitude data from the MPL3115A2 sensor",rki_mpl3115a2_read_alt_command);
+   rtems_shell_add_cmd("mpl3115a2temp","misc","Read the temperature registered by the MPL3115A2",rki_mpl3115a2_read_temp_command);
 
    /*
    ** Add the target specific commands
