@@ -136,6 +136,15 @@ static int sensor_mpu6050_ioctl(i2c_dev *dev, ioctl_command_t command, void *arg
       setGyroOffsets(0,0,0);
       setAccOffsets(0,0,0);
 
+      // Sanity check
+      uint8_t *whoami;
+      whoami = NULL;
+      sensor_mpu6050_get_reg_8(MPU6050_WHOAMI, &whoami);
+      if ((*whoami) != 0x68) {
+        err = -ENOTTY;
+        break;
+      }
+
       // Sensor configuration
       err =       sensor_mpu6050_set_reg_8(dev, PWR_MGT_1, 0x00);               //Temp sensor enabled, internal 8MHz oscillator and cycle disabled
       err = err + sensor_mpu6050_set_reg_8(dev, SIGNAL_PATH_RESET, 0b00000111); //Accelerometer, Gyroscope and Thermometer path reset

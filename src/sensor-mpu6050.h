@@ -56,6 +56,7 @@ extern "C" {
 #define SIGNAL_PATH_RESET  0x68
 #define PWR_MGT_1          0x6B
 #define PWR_MGT_2          0x6C
+#define MPU6050_WHOAMI     0x75
 
 // Definitions used for angle calculation
 #define RAD_2_DEG             57.29578 // [deg/rad]
