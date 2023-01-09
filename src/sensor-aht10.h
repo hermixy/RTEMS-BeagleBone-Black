@@ -76,6 +76,39 @@ extern "C" {
 #define AHTXX_DATA_ERROR         0x03    //received data smaller than expected
 #define AHTXX_ERROR              0xFF    //other errors
 
+/**************************************************************************/
+/*
+    NOTE:
+    - Relative humidity range........ 0%..100%
+    - Relative humidity resolution... 0.024%
+    - Relative humidity accuracy..... +-2%
+    - Temperature range........ -40C..+85C
+    - Temperature resolution... 0.01C
+    - Temperature accuracy..... +-0.3C
+    - Response time............ 5..30sec
+    - Measurement with high frequency leads to heating of the
+      sensor, must be > 2 seconds apart to keep self-heating below 0.1C
+
+    - Sensors data structure:
+      - {status, RH, RH, RH+T, T, T}
+
+    - Status register controls:
+      7    6    5    4   3    2   1   0
+      BSY, MOD, MOD, xx, CAL, xx, xx, xx
+      - BSY:
+        - 1, sensor busy/measuring
+        - 0, sensor idle/sleeping
+      - MOD:
+        - 00, normal mode
+        - 01, cycle mode
+        - 1x, comand mode
+      - CAL:
+        - 1, calibration on
+        - 0, calibration off
+    - under normal conditions status is 0x18 & 0x80 if the sensor is busy
+*/
+/**************************************************************************/
+
 /**
  * @defgroup I2CSensorAHT10 Temperature and Humidity Sensor AHT10 Driver
  *
@@ -109,20 +142,10 @@ int i2c_dev_register_sensor_aht10(const char *bus_path, const char *dev_path);
 int sensor_aht10_begin(int fd);
 int sensor_aht10_read(int fd);
 
-
 // I2C functions
-
-#ifdef TEMP_READ
-// Temperature functions
 float sensor_aht10_get_temp(void);
-
-#endif
-
-#ifdef HUMID_READ
-// Humidity functions
 float sensor_aht10_get_humid(void);
 
-#endif
 
 /** @} */
 

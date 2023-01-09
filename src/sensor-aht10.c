@@ -24,8 +24,8 @@ static void updateTemperature();
 static int readMeasurement(uint8_t **buff);
 
 static int readStatusRegister(uint8_t **buff);
-static uint8_t getCalibration();
-static void getBusy();
+static uint8_t get_calibration_bit();
+static void get_busy_bit();
 
 // Functions
 static int read_bytes(int fd, uint16_t i2c_address, uint8_t data_address, uint16_t nr_bytes, uint8_t **buff){
@@ -195,27 +195,6 @@ static int sensor_aht10_ioctl(i2c_dev *dev, ioctl_command_t command, void *arg){
   return err;
 }
 
-/**************************************************************************/
-/*
-    updateHumidity()
-    Read relative humidity, in %
-    NOTE:
-    - relative humidity range........ 0%..100%
-    - relative humidity resolution... 0.024%
-    - relative humidity accuracy..... +-2%
-    - response time............ 5..30sec
-    - measurement with high frequency leads to heating of the
-      sensor, must be > 2 seconds apart to keep self-heating below 0.1C
-    - long-term exposure for 60 hours outside the normal range
-      (humidity > 80%) can lead to a temporary drift of the
-      signal +3%, sensor slowly returns to the calibrated state at normal
-      operating conditions
-    - sensors data structure:
-      - {status, RH, RH, RH+T, T, T}
-    - normal operating range T -20C..+60C, RH 10%..80%
-    - maximum operating rage T -40C..+80C, RH 0%..100%
-*/
-/**************************************************************************/
 static void updateHumidity(){
   uint32_t  humidity   = SENSOR_AHT10_Data.rawData[0];                          //20-bit raw humidity data
             humidity <<= 8;
@@ -228,21 +207,6 @@ static void updateHumidity(){
   SENSOR_AHT10_Data.sensor_humidity = ((float)humidity / 0x100000) * 100;
 }
 
-/**************************************************************************/
-/*
-    updateTemperature()
-    Read temperature, in C
-    NOTE:
-    - temperature range........ -40C..+85C
-    - temperature resolution... 0.01C
-    - temperature accuracy..... +-0.3C
-    - response time............ 5..30sec
-    - measurement with high frequency leads to heating of the
-      sensor, must be > 2 seconds apart to keep self-heating below 0.1C
-    - sensors data structure:
-      - {status, RH, RH, RH+T, T, T, CRC*}, *CRC for AHT2x only
-*/
-/**************************************************************************/
 static void updateTemperature(){
   uint32_t temperature   = SENSOR_AHT10_Data.rawData[2] & 0x0F;                //20-bit raw temperature data
            temperature <<= 8;
@@ -253,15 +217,6 @@ static void updateTemperature(){
   SENSOR_AHT10_Data.sensor_temperature = ((float)temperature / 0x100000) * 200 - 50;
 }
 
-/**************************************************************************/
-/*
-    readMeasurement()
-    Start new measurement, read sensor data to buffer & collect errors
-    NOTE:
-    - sensors data structure:
-      - {status, RH, RH, RH+T, T, T}
-*/
-/**************************************************************************/
 static int readMeasurement(uint8_t **buff){
   int fd;
   int rv;
@@ -279,7 +234,7 @@ static int readMeasurement(uint8_t **buff){
   set_bytes(AHT10_ADDRESS_X38, &val, 4);
 
   /* check busy bit */
-  getBusy();                                                //update status byte, read status byte & check busy bit
+  get_busy_bit();                                                //update status byte, read status byte & check busy bit
 
   if      (SENSOR_AHT10_Data.status == AHTXX_BUSY_ERROR) {delay_ms(AHTXX_MEASUREMENT_DELAY - AHTXX_CMD_DELAY);}
   else if (SENSOR_AHT10_Data.status != AHTXX_NO_ERROR)   {return 1;}                                           //no reason to continue, received data smaller than expected
@@ -312,7 +267,7 @@ static int readMeasurement(uint8_t **buff){
   free(tmp);
 
   /* check busy bit after measurement dalay */
-  getBusy(); //update status byte, read status byte & check busy bit
+  get_busy_bit(); //update status byte, read status byte & check busy bit
 
   if (SENSOR_AHT10_Data.status != AHTXX_NO_ERROR){
     return 1;
@@ -322,30 +277,6 @@ static int readMeasurement(uint8_t **buff){
 
 }
 
-/**************************************************************************/
-/*
-    readStatusRegister()
-    Read status register
-    NOTE:
-    - AHT1x status register controls:
-      7    6    5    4   3    2   1   0
-      BSY, MOD, MOD, xx, CAL, xx, xx, xx
-      - BSY:
-        - 1, sensor busy/measuring
-        - 0, sensor idle/sleeping
-      - MOD:
-        - 00, normal mode
-        - 01, cycle mode
-        - 1x, comand mode
-      - CAL:
-        - 1, calibration on
-        - 0, calibration off
-    - AHT2x status register controls:
-      7    6   5   4   3    2   1  0
-      BSY, xx, xx, xx, CAL, xx, xx, xx
-    - under normal conditions status is 0x18 & 0x80 if the sensor is busy
-*/
-/**************************************************************************/
 static int readStatusRegister(uint8_t **buff){
   int err;
 
@@ -362,17 +293,7 @@ static int readStatusRegister(uint8_t **buff){
   return err;
 }
 
-/**************************************************************************/
-/*
-    getCalibration()
-    Read calibration bits from status register
-    NOTE:
-    - 0x08=loaded, 0x00=not loaded
-    - calibration status check should only be performed at power-up,
-      rechecking is not required during data collection
-*/
-/**************************************************************************/
-static uint8_t getCalibration(){
+static uint8_t get_calibration_bit(){
   uint8_t *value;
   value = NULL;
 
@@ -381,15 +302,7 @@ static uint8_t getCalibration(){
   return ((*value) & AHTXX_STATUS_CTRL_CAL_ON); //0x08=loaded, 0x00=not loaded
 }
 
-/**************************************************************************/
-/*
-    getBusy()
-    Read/check busy bit after measurement command
-    NOTE:
-    - 0x80=busy, 0x00=measurement completed, etc
-*/
-/**************************************************************************/
-static void getBusy(){
+static void get_busy_bit(){
 
   delay_ms(AHTXX_CMD_DELAY);
 
@@ -433,7 +346,7 @@ int sensor_aht10_begin(int fd){
   // Do a soft reset before setting Normal Mode
   ioctl(fd, SENSOR_AHT10_SOFT_RST, NULL);
   ioctl(fd, SENSOR_AHT10_NORMAL_MODE, NULL);
-  if(getCalibration() == AHTXX_STATUS_CTRL_CAL_ON){
+  if(get_calibration_bit() == AHTXX_STATUS_CTRL_CAL_ON){
     err = 0;
   }else{
     err = 1;
@@ -445,18 +358,10 @@ int sensor_aht10_read(int fd){
   return ioctl(fd, SENSOR_AHT10_READ, NULL);
 }
 
-#ifdef TEMP_READ
-// Temperature functions
 float sensor_aht10_get_temp(){
   return SENSOR_AHT10_Data.sensor_temperature;
 }
 
-#endif
-
-#ifdef HUMID_READ
-// Humidity functions
 float sensor_aht10_get_humid(){
   return SENSOR_AHT10_Data.sensor_humidity;
 }
-
-#endif
