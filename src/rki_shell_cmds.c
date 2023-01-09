@@ -28,9 +28,10 @@ void rki_add_target_cmds(void);
 
 // MPU6050 commands
 int rki_mpu6050_open_command( int argc, char *argv[]);
-int rki_mpu6050_read_raw_command( int argc, char *argv[]);
-int rki_mpu6050_read_proc_command( int argc, char *argv[]);
+int rki_mpu6050_read_command( int argc, char *argv[]);
 int rki_mpu6050_read_temp_command( int argc, char *argv[]);
+int rki_mpu6050_read_angles_command( int argc, char *argv[]);
+
 
 // Gen uC commands
 int rki_genuC_send_command( int argc, char *argv[]);
@@ -102,31 +103,23 @@ int rki_add_local_cmds(void)
    rtems_shell_add_cmd("taskdemo","misc","Run a set of tasks",task_command);
 
    rtems_shell_add_cmd("dhrystone","misc","Run the Dhrystone Benchmark",dhrystone_command);
-
    rtems_shell_add_cmd("whetstone","misc","Run the Whetstone Benchmark",whetstone_command);
 
    rtems_shell_add_cmd("mpu6050open","misc","Register and open the MPU6050 driver",rki_mpu6050_open_command);
-
-   rtems_shell_add_cmd("mpu6050readraw","misc","Read raw data from the MPU6050 accelerometer and gyroscope",rki_mpu6050_read_raw_command);
-
-   rtems_shell_add_cmd("mpu6050readproc","misc","Read processed data from the MPU6050 accelerometer and gyroscope",rki_mpu6050_read_proc_command);
-
-   rtems_shell_add_cmd("mpu6050readtemp","misc","Read the temperature registered by the MPU6050",rki_mpu6050_read_temp_command);
+   rtems_shell_add_cmd("mpu6050read","misc","Read data from the MPU6050 accelerometer and gyroscope",rki_mpu6050_read_command);
+   rtems_shell_add_cmd("mpu6050temp","misc","Read the temperature registered by the MPU6050",rki_mpu6050_read_temp_command);
+   rtems_shell_add_cmd("mpu6050ang","misc","Read the RPY angles calculated from the MPU6050",rki_mpu6050_read_angles_command);
 
    rtems_shell_add_cmd("genucopen","misc","Register and open the driver for the generic uC",rki_genuC_open_command);
-
    rtems_shell_add_cmd("genuctest","misc","Send 0x03 0x06 0x09 to a generic uC",rki_genuC_send_command);
 
    rtems_shell_add_cmd("telemtest","misc","Send a Telemetry payload via I2C",rki_genuC_telemetry_test_command);
 
    rtems_shell_add_cmd("aht10open","misc","Register and open the AHT10 driver",rki_aht10_open_command);
-
    rtems_shell_add_cmd("aht10read","misc","Read temperature and humidity from the AHT10 sensor",rki_aht10_read_proc_command);
 
    rtems_shell_add_cmd("mpl3115a2open","misc","Register and open the MPL3115A2 driver",rki_mpl3115a2_open_command);
-
    rtems_shell_add_cmd("mpl3115a2readalt","misc","Read the altitude data from the MPL3115A2 sensor",rki_mpl3115a2_read_alt_command);
-
    rtems_shell_add_cmd("mpl3115a2readtemp","misc","Read the temperature registered by the MPL3115A2",rki_mpl3115a2_read_temp_command);
 
    /*
