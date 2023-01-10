@@ -158,6 +158,10 @@ static int sensor_mpu6050_ioctl(i2c_dev *dev, ioctl_command_t command, void *arg
       SENSOR_MPU6050_Priv_Data.preInterval = runtime_ms(); // may cause lack of angular accuracy if begin() is much before the first update()
       break;
 
+    case SENSOR_MPU6050_SET_REG:
+      // err = sensor_mpu6050_set_reg_8(dev, RegisterPtr, DataVal);
+      break;
+
     default:
       err = -ENOTTY;
       break;
@@ -379,6 +383,10 @@ int i2c_dev_register_sensor_mpu6050(const char *bus_path, const char *dev_path){
 
 int sensor_mpu6050_begin(int fd){
   return ioctl(fd, SENSOR_MPU6050_BEGIN, NULL);
+}
+
+int sensor_mpu6050_set_register(int fd){
+  return ioctl(fd, SENSOR_MPU6050_SET_REG, NULL);
 }
 
 void sensor_mpu6050_calcOffsets(void){
