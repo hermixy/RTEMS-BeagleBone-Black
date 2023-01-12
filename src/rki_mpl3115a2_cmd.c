@@ -64,11 +64,6 @@ rtems_task mpl3115a2_open(rtems_task_argument unused){
 
   close(fd);
 
-  fd = open(&bus_path[0], O_RDWR);
-  if(fd >= 0)
-    printf("Bus opened correctly...\n");
-  close(fd);
-
 	rtems_task_delete( RTEMS_SELF );    /* should not return */
 }
 

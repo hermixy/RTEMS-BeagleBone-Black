@@ -196,19 +196,19 @@ static int sensor_aht10_ioctl(i2c_dev *dev, ioctl_command_t command, void *arg){
 }
 
 static void updateHumidity(){
-  uint32_t  humidity   = SENSOR_AHT10_Data.rawData[0];                          //20-bit raw humidity data
+  uint32_t  humidity   = SENSOR_AHT10_Data.rawData[0];  //20-bit raw humidity data
             humidity <<= 8;
             humidity  |= SENSOR_AHT10_Data.rawData[1];
             humidity <<= 4;
             humidity  |= SENSOR_AHT10_Data.rawData[2] >> 4;
 
-  if (humidity > 0x100000) {humidity = 0x100000;}             //check if RH>100
+  if (humidity > 0x100000) {humidity = 0x100000;} //check if RH>100
 
   SENSOR_AHT10_Data.sensor_humidity = ((float)humidity / 0x100000) * 100;
 }
 
 static void updateTemperature(){
-  uint32_t temperature   = SENSOR_AHT10_Data.rawData[2] & 0x0F;                //20-bit raw temperature data
+  uint32_t temperature   = SENSOR_AHT10_Data.rawData[2] & 0x0F;  //20-bit raw temperature data
            temperature <<= 8;
            temperature  |= SENSOR_AHT10_Data.rawData[3];
            temperature <<= 8;
@@ -234,10 +234,9 @@ static int readMeasurement(uint8_t **buff){
   set_bytes(AHT10_ADDRESS_X38, &val, 4);
 
   /* check busy bit */
-  get_busy_bit();                                                //update status byte, read status byte & check busy bit
-
+  get_busy_bit();  //update status byte, read status byte & check busy bit
   if      (SENSOR_AHT10_Data.status == AHTXX_BUSY_ERROR) {delay_ms(AHTXX_MEASUREMENT_DELAY - AHTXX_CMD_DELAY);}
-  else if (SENSOR_AHT10_Data.status != AHTXX_NO_ERROR)   {return 1;}                                           //no reason to continue, received data smaller than expected
+  else if (SENSOR_AHT10_Data.status != AHTXX_NO_ERROR)   {return 1;}  //no reason to continue, received data smaller than expected
 
   /* read data from sensor */
   uint16_t nr_bytes = (uint16_t) 6;
@@ -266,7 +265,7 @@ static int readMeasurement(uint8_t **buff){
   }
   free(tmp);
 
-  /* check busy bit after measurement dalay */
+  /* check busy bit after measurement delay */
   get_busy_bit(); //update status byte, read status byte & check busy bit
 
   if (SENSOR_AHT10_Data.status != AHTXX_NO_ERROR){

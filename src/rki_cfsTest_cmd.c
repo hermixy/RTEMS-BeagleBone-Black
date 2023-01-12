@@ -61,7 +61,7 @@ rtems_task genuC_telemetry_test(rtems_task_argument unused){
 
 
   // Send the telemetry payload
-  printf("Sending telemetry payload sent correctly...\n");
+  printf("Sending telemetry payload...\n");
   rv = uC_set_bytes(UC_ADDRESS, &val, PAYLOAD_BYTES);
   if(rv >= 0){
     printf("Telemetry payload sent correctly...\n");
@@ -130,11 +130,6 @@ static void mpu6050_read_data(){
 
   close(fd);
 
-  fd = open(&bus_path[0], O_RDWR);
-  if(fd >= 0)
-    printf("Bus opened correctly...\n");
-  close(fd);
-
   //Data reading
   sensor_mpu6050_read_data();
   SENSOR_MPU6050_Data_t mpu = sensor_mpu6050_get_data();
@@ -145,6 +140,7 @@ static void mpu6050_read_data(){
   Telemetry_Payload.GyroRead[1] = mpu.gyroY;
   Telemetry_Payload.GyroRead[2] = mpu.gyroZ;
 }
+
 
 int rki_genuC_telemetry_test_command( int argc, char *argv[]){
 	rtems_status_code status;
