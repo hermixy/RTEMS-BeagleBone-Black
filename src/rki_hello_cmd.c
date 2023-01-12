@@ -12,7 +12,6 @@ int hello_command( int argc, char *argv[])
    printf(" / _, _/ / / / /___/ /  / /___/ /  \n");
    printf("/_/ \\_| /_/ /_____/_/  /_//____/   \n");
    printf("\n");
-   printf("Hello RTEMS!\n");
 
    return(0);
 }

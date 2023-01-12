@@ -61,7 +61,7 @@ rtems_task genuC_telemetry_test(rtems_task_argument unused){
 
 
   // Send the telemetry payload
-  printf("Sending telemetry payload sent correctly...\n");
+  printf("Sending telemetry payload...\n");
   rv = uC_set_bytes(UC_ADDRESS, &val, PAYLOAD_BYTES);
   if(rv >= 0){
     printf("Telemetry payload sent correctly...\n");
@@ -125,35 +125,22 @@ static void mpu6050_read_data(){
     printf("Device opened correctly...\n");
 
   // Device configuration
-  rv = sensor_mpu6050_set_conf(fd);
+  rv = sensor_mpu6050_begin(fd);
   printf("Device configured correctly...\n");
 
   close(fd);
 
-  fd = open(&bus_path[0], O_RDWR);
-  if(fd >= 0)
-    printf("Bus opened correctly...\n");
-  close(fd);
-
   //Data reading
-  int16_t *accel_buff;
-  int16_t *gyro_buff;
-
-  printf("Reading both accelerometer and gyroscope...\n");
-  accel_buff = NULL;
-  gyro_buff = NULL;
-  rv = sensor_mpu6050_get_accel(&accel_buff);
-  rv = sensor_mpu6050_get_gyro(&gyro_buff);
-
-  for (int i = 0; i < 3; i++){
-    Telemetry_Payload.AccelRead[i] = accel_buff[i] * (9.81/16384.0);
-    Telemetry_Payload.GyroRead[i] = gyro_buff[i] * (250.0/32768.0);
-  }
-
-  free(accel_buff);
-
-  free(gyro_buff);
+  sensor_mpu6050_read_data();
+  SENSOR_MPU6050_Data_t mpu = sensor_mpu6050_get_data();
+  Telemetry_Payload.AccelRead[0] = mpu.accX;
+  Telemetry_Payload.AccelRead[1] = mpu.accY;
+  Telemetry_Payload.AccelRead[2] = mpu.accZ;
+  Telemetry_Payload.GyroRead[0] = mpu.gyroX;
+  Telemetry_Payload.GyroRead[1] = mpu.gyroY;
+  Telemetry_Payload.GyroRead[2] = mpu.gyroZ;
 }
+
 
 int rki_genuC_telemetry_test_command( int argc, char *argv[]){
 	rtems_status_code status;
