@@ -105,7 +105,7 @@ typedef struct {
 
 int i2c_dev_register_sensor_mpu6050(const char *bus_path, const char *dev_path);
 int sensor_mpu6050_begin(int fd);
-int sensor_mpu6050_set_register(int fd);
+int sensor_mpu6050_set_register(int fd, uint8_t reg, uint8_t val);
 
 // Data functions
 SENSOR_MPU6050_Data_t sensor_mpu6050_get_data(void);

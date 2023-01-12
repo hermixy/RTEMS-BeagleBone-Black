@@ -130,6 +130,10 @@ static int sensor_mpu6050_get_reg_8(uint8_t register_add, uint8_t **buff){
 static int sensor_mpu6050_ioctl(i2c_dev *dev, ioctl_command_t command, void *arg){
   int err;
 
+  uint16_t aux;
+  uint8_t addr;
+  uint8_t val;
+
   switch (command) {
     case SENSOR_MPU6050_BEGIN:
       setFilterGyroCoef(DEFAULT_GYRO_COEFF);
@@ -159,7 +163,10 @@ static int sensor_mpu6050_ioctl(i2c_dev *dev, ioctl_command_t command, void *arg
       break;
 
     case SENSOR_MPU6050_SET_REG:
-      // err = sensor_mpu6050_set_reg_8(dev, RegisterPtr, DataVal);
+      aux = *(uint16_t*) arg;
+      addr  = (uint8_t)((aux & 0xFF00) >> 8);
+      val   = (uint8_t)(aux & 0x00FF);
+      err = sensor_mpu6050_set_reg_8(dev, addr, val);
       break;
 
     default:
@@ -385,8 +392,9 @@ int sensor_mpu6050_begin(int fd){
   return ioctl(fd, SENSOR_MPU6050_BEGIN, NULL);
 }
 
-int sensor_mpu6050_set_register(int fd){
-  return ioctl(fd, SENSOR_MPU6050_SET_REG, NULL);
+int sensor_mpu6050_set_register(int fd, uint8_t reg, uint8_t val){
+  uint16_t vector = (reg<<8)|(val);
+  return ioctl(fd, SENSOR_MPU6050_SET_REG, &vector);
 }
 
 void sensor_mpu6050_calcOffsets(void){
